@@ -22,9 +22,8 @@ class configuration(object):
         for option in options:
             try:
                 mdict[option] = self.Config.get(section, option)
-                if mdict1[option] == -1:
+                if mdict[option] == -1:
                     DebugPrint("skip: %s" % option)
             except:
                 print("exception on %s!" % option)
-                mdict1[option] = None
         return mdict
