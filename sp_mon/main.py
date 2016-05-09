@@ -106,8 +106,8 @@ if __name__ == "__main__":
     
     
     while 1:
-	time.sleep(5)
-    if container_dt: 
-        postNode(node_name,"containers",container_dt)
-    if vm_dt:
-        postNode(node_name,"vm",vm_dt)
+        time.sleep(5)
+        if container_dt: 
+            postNode(node_name,"containers",container_dt)
+        if vm_dt:
+            postNode(node_name,"vm",vm_dt)
