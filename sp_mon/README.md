@@ -19,7 +19,7 @@ sudo docker build -t son-sp-mon .
 
 Run monitoring probe as container
 ```
-sudo docker run -e "NODE_NAME=INT-SRV-1" -e "PROM_SRV=http://sp.int2.sonata-nfv.eu:9091" --privileged=true -d -v /var/run/docker.sock:/var/run/docker.sock -v /proc:/myhost/proc son-spmon
+sudo docker run -e "NODE_NAME=INT-SRV-1" -e "PROM_SRV=http://sp.int2.sonata-nfv.eu:9091/metrics" --privileged=true -d -v /var/run/docker.sock:/var/run/docker.sock -v /proc:/myhost/proc son-sp-mon
 ```
 
 ###Lead Developers
