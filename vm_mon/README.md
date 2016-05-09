@@ -3,10 +3,10 @@ Sonata's VM monitoring client is used in order to gather monitoring data from VM
 The url of the pushgateway monitoring server must be set in node.conf file 
 
 Supported monitoring metrics are:
-    * cpu usage
-    * memory usage
-    * disk usage 
-    * network traffic
+ * cpu usage
+ * memory usage
+ * disk usage 
+ * network traffic
 
 ### Dependencies
  * python 2.7
