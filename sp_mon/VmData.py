@@ -112,14 +112,13 @@ class vmdt:
             if count < 2:
                 continue
             dk = line.split()
-            if dk[0] == 'none':
-                continue
-            disk ={}
-            disk["file_system"] = dk[0]
-            disk["size_1k_block"] = dk[1] 
-            disk["used"] = dk[2]
-            disk["usage_perc"] = dk[4].replace('%','')
-            disks.append(disk)
+            if dk[0].startswith('/dev/'):
+                disk ={}
+                disk["file_system"] = dk[0]
+                disk["size_1k_block"] = dk[1]
+                disk["used"] = dk[2]
+                disk["usage_perc"] = dk[4].replace('%','')
+                disks.append(disk)
         return disks
     
 class GetCpuLoad(object):
