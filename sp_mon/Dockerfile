@@ -9,11 +9,10 @@ apt-get -y install python2.7 python2.7-dev python-pip docker-engine=1.10.2-0~tru
 pip install docker-py 
  
 RUN mkdir -p /opt/Monitoring
-COPY ./ /opt/Monitoring
+COPY ./sp_mon/ /opt/Monitoring
 
-ADD ./run.sh /opt/Monitoring/run.sh
+ADD ./sp_mon/run.sh /opt/Monitoring/run.sh
 RUN chmod 0755 /opt/Monitoring/run.sh
 RUN ls -la /opt/Monitoring/*
-
 
 CMD ["/opt/Monitoring/run.sh"]
