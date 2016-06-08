@@ -57,7 +57,7 @@ class Statistics:
             con['block_ou_MB'] = self.convert2MB(words[16],words[17])
             self.containers.append(con)
 
-   def collectData(self):
+    def collectData(self):
         cli = Client(base_url='unix://var/run/docker.sock')
         containers_obj = cli.containers()
         #containers_obj = cli.containers(all='true')
@@ -85,16 +85,16 @@ class Statistics:
             con['block_in_MB'] = 0
             con['block_ou_MB'] = 0
             cont_info['stats'] = con
-    self.mon_dt.append(cont_info)
+        self.mon_dt.append(cont_info)
 
     def getstats(self, id_):
         for cnt in self.containers:
             if id_.startswith(cnt['id']):
-            return cnt
-    return {}
+                return cnt
+        return {}
 
 
-   def statusCode(self, status_):
+    def statusCode(self, status_):
         if status_.startswith('Up'): 
             return 1
         elif status_.startswith('Exit'): 
