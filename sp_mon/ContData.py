@@ -45,4 +45,4 @@ class cntdt:
             cnt_block_ou_MB += "cnt_block_ou_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['block_ou_MB']))+ '\n'
 
         data = cnt_created + cnt_cpu_perc +cnt_mem_perc + cnt_mem_usage_MB + cnt_mem_limit_MB + cnt_net_rx_MB + cnt_net_tx_MB + cnt_block_in_MB + cnt_block_ou_MB + cnt_status
-    return data
+        return data
