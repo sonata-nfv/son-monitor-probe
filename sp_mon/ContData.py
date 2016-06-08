@@ -14,8 +14,8 @@ class cntdt:
         self.data = Statistics().getMonInfo()
 
     def checkNone(self,val_):
-    if val_ == None:
-        return 0
+        if val_ == None:
+            return 0
         return val_
 
     def prom_parser(self):
