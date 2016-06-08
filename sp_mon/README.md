@@ -1,7 +1,6 @@
 #son-service-platform-probe
 Sonata's Service platform monitoring client is used in order to gather monitoring data from VM and containers which hosts sonatas servives and push them to monitoring server. 
 
-
 Supported monitoring metrics are:
  * cpu usage
  * memory usage
