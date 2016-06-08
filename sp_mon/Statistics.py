@@ -71,21 +71,21 @@ class Statistics:
             cont_info['image'] = container['ImageID']
             #cont_info['stats'] = cli.stats(cont_info['id'], False, False)
             cont_info['status'] = self.statusCode(container['Status'])
-        if cont_info['status'] == 1:
-            cont_info['stats'] = self.getstats(cont_info['id'])
-        else:
-            con = {}
-            con['id'] = 0
-            con['cpu_perc'] = 0
-            con['mem_perc'] = 0
-            con['mem_usage_MB'] = 0
-            con['mem_limit_MB'] = 0
-            con['net_rx_MB'] = 0
-            con['net_tx_MB'] = 0
-            con['block_in_MB'] = 0
-            con['block_ou_MB'] = 0
-            cont_info['stats'] = con
-        self.mon_dt.append(cont_info)
+            if cont_info['status'] == 1:
+                cont_info['stats'] = self.getstats(cont_info['id'])
+            else:
+                con = {}
+                con['id'] = 0
+                con['cpu_perc'] = 0
+                con['mem_perc'] = 0
+                con['mem_usage_MB'] = 0
+                con['mem_limit_MB'] = 0
+                con['net_rx_MB'] = 0
+                con['net_tx_MB'] = 0
+                con['block_in_MB'] = 0
+                con['block_ou_MB'] = 0
+                cont_info['stats'] = con
+            self.mon_dt.append(cont_info)
 
     def getstats(self, id_):
         for cnt in self.containers:
