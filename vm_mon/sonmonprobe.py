@@ -6,7 +6,7 @@ __author__="panos"
 __date__ ="$Apr 20, 2016 1:11:43 PM$"
 
 import urllib2, time, logging                                                                                                       
-import json,urllib2
+import json,urllib2,os
 from threading import  Thread
 from VmData import vmdt
 from configure import configuration
@@ -21,9 +21,9 @@ def init():
        
     #read configuration
     
-    conf = configuration("node.conf")
-    prometh_server = conf.ConfigSectionMap("Prometheus")['server_url']
-    node_name = conf.ConfigSectionMap("vm_node")['node_name']
+    conf = configuration("/opt/Monitoring/node.conf")
+    node_name = os.getenv('NODE_NAME', conf.ConfigSectionMap("vm_node")['node_name'])
+    prometh_server = os.getenv('PROM_SRV', conf.ConfigSectionMap("vm_node")['node_name'])
     logger = logging.getLogger('dataCollector')
     #hdlr = logging.FileHandler('dataCollector.log', mode='w')
     hdlr = RotatingFileHandler('dataCollector.log', maxBytes=10000, backupCount=1)
@@ -93,8 +93,5 @@ if __name__ == "__main__":
     
     
     while 1:
-	time.sleep(3)
-	#print '---------------------------------'
-        #print(time.ctime())
-	#print(vm_dt)
-    	postNode(node_name,"vnf",vm_dt)
+        time.sleep(3)
+        postNode(node_name,"vnf",vm_dt)
