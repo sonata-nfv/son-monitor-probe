@@ -12,6 +12,7 @@ Supported monitoring metrics are:
  * python 2.7
  
 Run monitoring probe:
+
 a. From code
 ```
 export PROM_SRV=http://pushgateway:9091/metrics

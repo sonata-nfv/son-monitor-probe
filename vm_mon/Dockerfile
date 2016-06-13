@@ -11,3 +11,4 @@ RUN chmod 0755 /opt/Monitoring/run.sh
 RUN ls -la /opt/Monitoring/*
 
 CMD ["/opt/Monitoring/run.sh"]
+
