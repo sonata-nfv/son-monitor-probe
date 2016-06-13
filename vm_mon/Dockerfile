@@ -1,7 +1,7 @@
 FROM ubuntu:14.04
 
 RUN apt-get update && apt-get -y upgrade && \
-apt-get -y install apache2 python2.7 libmysqlclient-dev python2.7-dev nano && \ 
+apt-get -y install apache2 python2.7 libmysqlclient-dev python2.7-dev python-pip nano && \ 
 mkdir -p /opt/Monitoring
 
 COPY ./vm_mon/ /opt/Monitoring
