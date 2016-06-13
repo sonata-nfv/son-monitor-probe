@@ -11,19 +11,19 @@ Supported monitoring metrics are:
 ### Dependencies
  * python 2.7
  
-###Run monitoring probe:
-
+Run monitoring probe:
+a. From code
 ```
 export PROM_SRV=http://pushgateway:9091/metrics
 export NODE_NAME=VNF_1
 sudo python sonmonprobe.py
 ```
-Using container
+b. Using container
 ```
 sudo docker build   -t son-vm-probe .
 sudo docker run -d --name son-vm-probe -e NODE_NAME=VNF_1 -e PROM_SRV=http://pushgateway.eu:9091/metrics  --privileged=true  -v /proc:/myhost/proc -v /:/rootfs:ro son-vm-probe
 ```
-Using package
+c. Using package
 ```
 sudo pip install VmMonProbe
 sudo python -c 'from vm_mon_probe import probe; probe().run("VNF_1","http://pushgateway.eu:9091/metrics")'
