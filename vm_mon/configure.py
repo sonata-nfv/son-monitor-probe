@@ -13,7 +13,7 @@ if __name__ == "__main__":
 class configuration(object):
     def __init__(self, file):
         self.Config = ConfigParser.ConfigParser()
-        self.Config.read("node.conf")
+        self.Config.read(file)
         
 
     def ConfigSectionMap(self,section):

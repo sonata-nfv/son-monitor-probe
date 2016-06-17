@@ -11,7 +11,7 @@ Supported monitoring metrics are:
  * python 2.7
  * docker-engine 1.10.2
 
-Build container container
+Build container
 ```
 sudo docker build -t son-sp-mon .
 ```
