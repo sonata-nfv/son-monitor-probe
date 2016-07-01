@@ -97,5 +97,5 @@ if __name__ == "__main__":
     
     while 1:
         time.sleep(3)
-        print vm_dt
-        #postNode(node_name,"vnf",vm_dt)
+        #print vm_dt
+        postNode(node_name,"vnf",vm_dt)
