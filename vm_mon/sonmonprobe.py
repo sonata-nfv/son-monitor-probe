@@ -80,8 +80,11 @@ def getMetaData():
 def collectVM(id_):
     global vm_dt
     vm_dt = ''
+    lsval={}
     while 1:
-        vm_dt = vmdt(id_).prom_parser()
+        dt_collector = vmdt(id_,lsval)
+        lsval = dt_collector.getCurrentDT()
+        vm_dt = dt_collector.prom_parser()
         time.sleep(1)
 
 
@@ -94,4 +97,5 @@ if __name__ == "__main__":
     
     while 1:
         time.sleep(3)
-        postNode(node_name,"vnf",vm_dt)
+        print vm_dt
+        #postNode(node_name,"vnf",vm_dt)

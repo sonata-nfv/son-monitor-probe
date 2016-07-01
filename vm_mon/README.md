@@ -6,7 +6,7 @@ Supported monitoring metrics are:
  * cpu usage
  * memory usage
  * disk usage 
- * network traffic
+ * network traffic (transmitted bytes, received bytes, packets per second, bytes per second)
 
 ### Dependencies
  * python 2.7
