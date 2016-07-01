@@ -19,11 +19,13 @@ export PROM_SRV=http://pushgateway:9091/metrics
 export NODE_NAME=VNF_1
 sudo python sonmonprobe.py
 ```
+
 b. Using container
 ```
 sudo docker build -t son-vm-probe .
-sudo docker run -d --name son-vm-probe -e NODE_NAME=VNF_1 -e PROM_SRV=http://pushgateway:9091/metrics  --privileged=true  -v /proc:/myhost/proc -v /:/rootfs:ro son-vm-probe
+sudo docker run -d --name son-vm-probe -e NODE_NAME=VNF_1 -e PROM_SRV=http://pushgateway:9091/metrics --net="host" --privileged=true  -v /proc:/myhost/proc -v /:/rootfs:ro son-vm-probe
 ```
+
 c. Using package
 ```
 sudo pip install VmMonProbe
