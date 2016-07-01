@@ -10,15 +10,17 @@ __date__ ="$Apr 8, 2016 1:30:54 PM$"
 
 class vmdt:
     
-    def __init__(self,id_):
+    def __init__(self,id_, lsdt_):
         self.id = id_
+        self.prv_mon_data = lsdt_
         self.mon_data = {}
         self.mon_data['ram'] = self.getRAM()
         self.mon_data['cpu'] = self.getCPU() 
         self.mon_data['network'] = self.getNetTrBytes()
         self.mon_data['disk'] = self.getdiskUsage()
         
-
+    def getCurrentDT(self):
+        return self.mon_data
 
     def prom_parser(self):
         #containers metric types
@@ -28,6 +30,10 @@ class vmdt:
         vm_mem_total_MB = "# TYPE vm_mem_total_MB gauge" + '\n'
         vm_net_rx_MB = "# TYPE vm_net_rx_MB gauge" + '\n'
         vm_net_tx_MB = "# TYPE vm_net_tx_MB gauge" + '\n'
+        vm_net_rx_Bps = "# TYPE vm_net_rx_Bps gauge" + '\n'
+        vm_net_tx_Bps = "# TYPE vm_net_tx_Bps gauge" + '\n'
+        vm_net_rx_pps = "# TYPE vm_net_rx_pps gauge" + '\n'
+        vm_net_tx_pps = "# TYPE vm_net_tx_pps gauge" + '\n'
         vm_disk_usage_perc = "# TYPE vm_disk_usage_perc gauge" + '\n'
         vm_disk_used_1k_blocks = "# TYPE vm_disk_used_1k_blocks gauge" + '\n'
         vm_disk_total_1k_blocks = "# TYPE vm_disk_total_1k_blocks gauge" + '\n'
@@ -43,12 +49,30 @@ class vmdt:
         for cp in data_['network']:   
             vm_net_rx_MB += "vm_net_rx_MB {id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_MB'])+ '\n'
             vm_net_tx_MB += "vm_net_tx_MB{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_MB'])+ '\n'
+            if cp['rx_Bps'] != -1:
+                vm_net_rx_Bps += "vm_net_rx_Bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_Bps'])+ '\n'
+            else:
+                vm_net_rx_Bps =''
+            if cp['tx_Bps'] != -1:
+                vm_net_tx_Bps += "vm_net_tx_Bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_Bps'])+ '\n'
+            else:
+                vm_net_tx_Bps=''
+            if cp['rx_pps'] != -1:
+                vm_net_rx_pps += "vm_net_rx_pps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_pps'])+ '\n'
+            else:
+                vm_net_rx_pps=''
+            if cp['tx_pps'] != -1:
+                vm_net_tx_pps += "vm_net_tx_pps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_pps'])+ '\n'
+            else:
+                vm_net_tx_pps=''
+
+
         for cp in data_['disk']: 
             vm_disk_usage_perc += "vm_disk_usage_perc{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['usage_perc'])+ '\n'
             vm_disk_used_1k_blocks += "vm_disk_used_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['used'])+ '\n'
             vm_disk_total_1k_blocks += "vm_disk_total_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['size_1k_block'])+ '\n'
             
-        data = vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks + vm_disk_total_1k_blocks
+        data = vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks  + vm_disk_total_1k_blocks + vm_net_rx_Bps + vm_net_tx_Bps + vm_net_rx_pps + vm_net_tx_pps   
         return data
         
     
@@ -73,12 +97,54 @@ class vmdt:
             nif = line.split()
             netif ={}
             netif["interface"] = nif[0]
-            netif["rx_MB"] = int(nif[1])/1000000 
-            netif["tx_MB"] = int(nif[9])/1000000
+            netif["rx_B"] = int(nif[1]) 
+            netif["tx_B"] = int(nif[9])
+            netif["rx_pks"] = int(nif[2]) 
+            netif["tx_pks"] = int(nif[10])
+            netif["rx_error"] = int(nif[3]) 
+            netif["rx_drops"] = int(nif[4])
+            netif["tx_error"] = int(nif[11]) 
+            netif["tx_drops"] = int(nif[12])
+            #RX pkts per sec
+            lv = int(self.getlastVal(nif[0],"rx_pks"))
+            if lv != -1:
+                netif["rx_pps"] = int(nif[2]) - lv
+            else:
+                netif["rx_pps"] = -1
+            #TX pkts per sec
+            lv = int(self.getlastVal(nif[0],"tx_pks"))
+            if lv != -1:    
+                netif["tx_pps"] = int(nif[10]) - lv
+            else:
+                netif["tx_pps"] = -1
+            #RX Bytes per sec
+            lv = int(self.getlastVal(nif[0],"rx_B"))
+            if lv != -1:     
+                netif["rx_Bps"] = int(nif[1]) - lv
+            else:
+                netif["rx_Bps"] = -1
+            #TX Bytes per sec
+            lv = int(self.getlastVal(nif[0],"tx_B"))
+            if lv != -1:    
+                netif["tx_Bps"] = int(nif[9]) - lv
+            else: 
+                netif["tx_Bps"] = -1
+            
+            netif["rx_MB"] = round(int(nif[1])/1000000.0,2) 
+            netif["tx_MB"] = round(int(nif[9])/1000000.0,2)
             netifs.append(netif)
             
         return netifs
     
+    def getlastVal(self,intf_,mtr_):
+        if not 'network' in self.prv_mon_data:
+            return -1
+        for inf in self.prv_mon_data['network']:
+            if inf['interface'] == intf_:
+                if mtr_ in inf:
+                    return inf[mtr_]
+        return -1
+
     def getdiskUsage(self):
         p = subprocess.Popen('df', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         lines = p.stdout.readlines()
