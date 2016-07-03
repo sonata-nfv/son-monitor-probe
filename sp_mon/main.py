@@ -24,7 +24,7 @@ def init():
     if hasattr(conf.ConfigSectionMap("vm_node"),'cadvisor'):
     	cadvisor = conf.ConfigSectionMap("vm_node")['cadvisor']
     node_name = os.getenv('NODE_NAME', conf.ConfigSectionMap("vm_node")['node_name'])
-    prometh_server = os.getenv('PROM_SRV', conf.ConfigSectionMap("vm_node")['node_name'])
+    prometh_server = os.getenv('PROM_SRV', conf.ConfigSectionMap("Prometheus")['server_url'])
     #node_name = conf.ConfigSectionMap("vm_node")['node_name']
     #prometh_server = conf.ConfigSectionMap("Prometheus")['server_url']
     if hasattr(conf.ConfigSectionMap("vm_node"),'node_exporter'):
