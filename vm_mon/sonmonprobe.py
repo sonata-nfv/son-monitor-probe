@@ -23,7 +23,7 @@ def init():
     
     conf = configuration("/opt/Monitoring/node.conf")
     node_name = os.getenv('NODE_NAME', conf.ConfigSectionMap("vm_node")['node_name'])
-    prometh_server = os.getenv('PROM_SRV', conf.ConfigSectionMap("vm_node")['node_name'])
+    prometh_server = os.getenv('PROM_SRV', conf.ConfigSectionMap("Prometheus")['server_url'])
     logger = logging.getLogger('dataCollector')
     #hdlr = logging.FileHandler('dataCollector.log', mode='w')
     hdlr = RotatingFileHandler('dataCollector.log', maxBytes=10000, backupCount=1)

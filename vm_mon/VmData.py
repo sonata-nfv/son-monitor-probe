@@ -96,7 +96,8 @@ class vmdt:
                 continue
             nif = line.split()
             netif ={}
-            netif["interface"] = nif[0].replace(':','')
+            nif[0] = nif[0].replace(':','')
+            netif["interface"] = nif[0]
             netif["rx_B"] = int(nif[1]) 
             netif["tx_B"] = int(nif[9])
             netif["rx_pks"] = int(nif[2]) 
@@ -175,7 +176,7 @@ class GetCpuLoad(object):
 
     def getcputime(self):
         '''
-        #the formulas from htop 
+        #the formulas fromnif[0].replace(':','') htop 
              user    nice   system  idle      iowait irq   softirq  steal  guest  guest_nice
         cpu  74608   2520   24433   1117073   6176   4054  0        0      0      0
 
