@@ -11,6 +11,7 @@ __date__ ="$Apr 8, 2016 1:30:54 PM$"
 class vmdt:
     
     def __init__(self,id_, lsdt_):
+        self.id = id_
         self.mon_data = {}
         self.prv_mon_data = lsdt_
         self.mon_data['ram'] = self.getRAM()
@@ -94,7 +95,8 @@ class vmdt:
                 continue
             nif = line.split()
             netif ={}
-            netif["interface"] = nif[0].replace(':','')
+            nif[0] = nif[0].replace(':','')
+            netif["interface"] = nif[0]
             netif["rx_B"] = int(nif[1]) 
             netif["tx_B"] = int(nif[9])
             netif["rx_pks"] = int(nif[2]) 
