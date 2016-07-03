@@ -29,7 +29,7 @@ sudo docker run -d --name son-vm-probe -e NODE_NAME=VNF_1 -e PROM_SRV=http://pus
 c. Using package
 ```
 sudo pip install VmMonProbe
-sudo python -c 'from vm_mon_probe import probe; probe().run("VNF_1","http://pushgateway.eu:9091/metrics")'
+sudo python -c 'from vm_mon_probe import probe; probe().run("TEST_VNF_1","http://pushgateway.eu:9091/metrics")'
 ```
 
 ###Lead Developers

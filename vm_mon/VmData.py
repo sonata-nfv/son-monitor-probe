@@ -129,7 +129,6 @@ class vmdt:
                 netif["tx_Bps"] = int(nif[9]) - lv
             else: 
                 netif["tx_Bps"] = -1
-            
             netif["rx_MB"] = round(int(nif[1])/1000000.0,2) 
             netif["tx_MB"] = round(int(nif[9])/1000000.0,2)
             netifs.append(netif)
