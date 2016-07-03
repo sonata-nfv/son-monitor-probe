@@ -96,7 +96,7 @@ class vmdt:
                 continue
             nif = line.split()
             netif ={}
-            netif["interface"] = nif[0]
+            netif["interface"] = nif[0].replace(':','')
             netif["rx_B"] = int(nif[1]) 
             netif["tx_B"] = int(nif[9])
             netif["rx_pks"] = int(nif[2]) 

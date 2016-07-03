@@ -10,16 +10,18 @@ __date__ ="$Apr 8, 2016 1:30:54 PM$"
 
 class vmdt:
     
-    def __init__(self,id_):
+    def __init__(self,id_, lsdt_):
         self.mon_data = {}
+        self.prv_mon_data = lsdt_
         self.mon_data['ram'] = self.getRAM()
         self.mon_data['cpu'] = self.getCPU() 
         self.mon_data['network'] = self.getNetTrBytes()
         self.mon_data['disk'] = self.getdiskUsage()
         
+    def getCurrentDT(self):
+        return self.mon_data
 
-
-    def prom_parser(self, id_):
+    def prom_parser(self):
         #containers metric types
         vm_cpu_perc = "# TYPE vm_cpu_perc gauge" + '\n'
         vm_mem_perc = "# TYPE vm_mem_perc gauge" + '\n'
@@ -27,29 +29,50 @@ class vmdt:
         vm_mem_total_MB = "# TYPE vm_mem_total_MB gauge" + '\n'
         vm_net_rx_MB = "# TYPE vm_net_rx_MB gauge" + '\n'
         vm_net_tx_MB = "# TYPE vm_net_tx_MB gauge" + '\n'
+        vm_net_rx_Bps = "# TYPE vm_net_rx_Bps gauge" + '\n'
+        vm_net_tx_Bps = "# TYPE vm_net_tx_Bps gauge" + '\n'
+        vm_net_rx_pps = "# TYPE vm_net_rx_pps gauge" + '\n'
+        vm_net_tx_pps = "# TYPE vm_net_tx_pps gauge" + '\n'
         vm_disk_usage_perc = "# TYPE vm_disk_usage_perc gauge" + '\n'
         vm_disk_used_1k_blocks = "# TYPE vm_disk_used_1k_blocks gauge" + '\n'
         vm_disk_total_1k_blocks = "# TYPE vm_disk_total_1k_blocks gauge" + '\n'
     
         data_ = self.mon_data
         for cp in data_['cpu']:
-            vm_cpu_perc += "vm_cpu_perc{id=\""+id_+"\", core=\""+str(cp['core'])+"\"}" +str(cp['usage']) + '\n'
+            vm_cpu_perc += "vm_cpu_perc{id=\""+self.id+"\", core=\""+str(cp['core'])+"\"}" +str(cp['usage']) + '\n'
         
-        vm_mem_perc += "vm_mem_perc{id=\""+id_+"\"}" +str(round(float((data_['ram']['freeRam'])/float(data_['ram']['totalRAM'])*100),2))+ '\n'
-        vm_mem_free_MB += "vm_mem_free_MB{id=\""+id_+"\"}" +str(data_['ram']['freeRam'])+ '\n'
-        vm_mem_total_MB += "vm_mem_total_MB{id=\""+id_+"\"}" +str(data_['ram']['totalRAM'])+ '\n'
+        vm_mem_perc += "vm_mem_perc{id=\""+self.id+"\"}" +str(round(float((data_['ram']['freeRam'])/float(data_['ram']['totalRAM'])*100),2))+ '\n'
+        vm_mem_free_MB += "vm_mem_free_MB{id=\""+self.id+"\"}" +str(data_['ram']['freeRam'])+ '\n'
+        vm_mem_total_MB += "vm_mem_total_MB{id=\""+self.id+"\"}" +str(data_['ram']['totalRAM'])+ '\n'
         
         for cp in data_['network']:   
-            vm_net_rx_MB += "vm_net_rx_MB {id=\""+id_+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_MB'])+ '\n'
-            vm_net_tx_MB += "vm_net_tx_MB{id=\""+id_+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_MB'])+ '\n'
+            vm_net_rx_MB += "vm_net_rx_MB {id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_MB'])+ '\n'
+            vm_net_tx_MB += "vm_net_tx_MB{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_MB'])+ '\n'
+            if cp['rx_Bps'] != -1:
+                vm_net_rx_Bps += "vm_net_rx_Bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_Bps'])+ '\n'
+            else:
+                vm_net_rx_Bps =''
+            if cp['tx_Bps'] != -1:
+                vm_net_tx_Bps += "vm_net_tx_Bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_Bps'])+ '\n'
+            else:
+                vm_net_tx_Bps=''
+            if cp['rx_pps'] != -1:
+                vm_net_rx_pps += "vm_net_rx_pps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_pps'])+ '\n'
+            else:
+                vm_net_rx_pps=''
+            if cp['tx_pps'] != -1:
+                vm_net_tx_pps += "vm_net_tx_pps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_pps'])+ '\n'
+            else:
+                vm_net_tx_pps=''
+
+
         for cp in data_['disk']: 
-            vm_disk_usage_perc += "vm_disk_usage_perc{id=\""+id_+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['usage_perc'])+ '\n'
-            vm_disk_used_1k_blocks += "vm_disk_used_1k_blocks{id=\""+id_+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['used'])+ '\n'
-            vm_disk_total_1k_blocks += "vm_disk_total_1k_blocks{id=\""+id_+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['size_1k_block'])+ '\n'
+            vm_disk_usage_perc += "vm_disk_usage_perc{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['usage_perc'])+ '\n'
+            vm_disk_used_1k_blocks += "vm_disk_used_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['used'])+ '\n'
+            vm_disk_total_1k_blocks += "vm_disk_total_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['size_1k_block'])+ '\n'
             
-        data = vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks + vm_disk_total_1k_blocks
+        data = vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks  + vm_disk_total_1k_blocks + vm_net_rx_Bps + vm_net_tx_Bps + vm_net_rx_pps + vm_net_tx_pps   
         return data
-        
     
          
     def getRAM(self):
@@ -58,30 +81,6 @@ class vmdt:
 
     
     def getCPU(self):
-        '''
-        The meanings of the columns are as follows, from left to right:
-
-        - user: normal processes executing in user mode
-        - nice: niced processes executing in user mode
-        - system: processes executing in kernel mode
-        - idle: twiddling thumbs
-        - iowait: waiting for I/O to complete
-        - irq: servicing interrupts
-        - softirq: servicing softirqs
-        - steal: involuntary wait
-        - guest: running a normal guest
-        - guest_nice: running a niced guest
-        
-        p = subprocess.Popen('cat /proc/stat | grep cpu', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        lines = p.stdout.readlines()
-        cpus = []
-        for line in lines:
-            if line.startswith("cpu"):
-                cpu = line.split()
-                usage = (float(cpu[1])+float(cpu[3]))/(float(cpu[1])+float(cpu[3])+float(cpu[4]))*100
-                cpus.append({"core": cpu[0],"usage":round(usage,2)})
-        return cpus
-        '''
         return GetCpuLoad().getcpuload()
             
     def getNetTrBytes(self):
@@ -95,12 +94,54 @@ class vmdt:
                 continue
             nif = line.split()
             netif ={}
-            netif["interface"] = nif[0]
-            netif["rx_MB"] = int(nif[1])/1000000 
-            netif["tx_MB"] = int(nif[9])/1000000
+            netif["interface"] = nif[0].replace(':','')
+            netif["rx_B"] = int(nif[1]) 
+            netif["tx_B"] = int(nif[9])
+            netif["rx_pks"] = int(nif[2]) 
+            netif["tx_pks"] = int(nif[10])
+            netif["rx_error"] = int(nif[3]) 
+            netif["rx_drops"] = int(nif[4])
+            netif["tx_error"] = int(nif[11]) 
+            netif["tx_drops"] = int(nif[12])
+            #RX pkts per sec
+            lv = int(self.getlastVal(nif[0],"rx_pks"))
+            if lv != -1:
+                netif["rx_pps"] = int(nif[2]) - lv
+            else:
+                netif["rx_pps"] = -1
+            #TX pkts per sec
+            lv = int(self.getlastVal(nif[0],"tx_pks"))
+            if lv != -1:    
+                netif["tx_pps"] = int(nif[10]) - lv
+            else:
+                netif["tx_pps"] = -1
+            #RX Bytes per sec
+            lv = int(self.getlastVal(nif[0],"rx_B"))
+            if lv != -1:     
+                netif["rx_Bps"] = int(nif[1]) - lv
+            else:
+                netif["rx_Bps"] = -1
+            #TX Bytes per sec
+            lv = int(self.getlastVal(nif[0],"tx_B"))
+            if lv != -1:    
+                netif["tx_Bps"] = int(nif[9]) - lv
+            else: 
+                netif["tx_Bps"] = -1
+            
+            netif["rx_MB"] = round(int(nif[1])/1000000.0,2) 
+            netif["tx_MB"] = round(int(nif[9])/1000000.0,2)
             netifs.append(netif)
             
         return netifs
+
+    def getlastVal(self,intf_,mtr_):
+        if not 'network' in self.prv_mon_data:
+            return -1
+        for inf in self.prv_mon_data['network']:
+            if inf['interface'] == intf_:
+                if mtr_ in inf:
+                    return inf[mtr_]
+        return -1
     
     def getdiskUsage(self):
         p = subprocess.Popen('df', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -124,20 +165,25 @@ class vmdt:
 class GetCpuLoad(object):
 
     def __init__(self, percentage=True, sleeptime = 1):
-        '''
-        @parent class: GetCpuLoad
-        @date: 04.12.2014
-        @author: plagtag
-        @info: 
-        @param:
-        @return: CPU load in percentage
-        '''
+        
         self.percentage = percentage
         self.cpustat = '/proc/stat'
         self.sep = ' ' 
         self.sleeptime = sleeptime
 
     def getcputime(self):
+        '''
+        #the formulas from htop 
+             user    nice   system  idle      iowait irq   softirq  steal  guest  guest_nice
+        cpu  74608   2520   24433   1117073   6176   4054  0        0      0      0
+
+
+        Idle=idle+iowait
+        NonIdle=user+nice+system+irq+softirq+steal
+        Total=Idle+NonIdle # first line of file for all cpus
+
+        CPU_Percentage=((Total-PrevTotal)-(Idle-PrevIdle))/(Total-PrevTotal)
+        '''
         cpu_infos = {} #collect here the information
         with open(self.cpustat,'r') as f_stat:
             lines = [line.split(self.sep) for content in f_stat.readlines() for line in content.split('\n') if line.startswith('cpu')]

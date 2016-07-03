@@ -83,9 +83,12 @@ def getMetaData():
 def function1(id_):
     global vm_dt
     vm_dt = None
+    lsval={}
     while 1:
-        vm_dt = vmdt(id_).prom_parser(id_)
-        time.sleep(3)
+        dt_collector = vmdt(id_,lsval)
+        lsval = dt_collector.getCurrentDT()
+        vm_dt = dt_collector.prom_parser()
+        time.sleep(1)
         
 def function2():
     global container_dt
