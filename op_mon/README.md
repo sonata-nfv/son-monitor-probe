@@ -1,5 +1,5 @@
 #son-vim-openstack-probe
-Sonata's vim (openstack) monitoring client is used in order to gather monitoring data from VIM push them to monitoring server. 
+Sonata's vim (openstack) monitoring client is used in order to gather monitoring data from VIM and push them to monitoring server. 
 
 Supported monitoring metrics are:
  * Total/used Cores
@@ -11,8 +11,11 @@ Supported monitoring metrics are:
  * python 2.7
 
 Run monitoring probe:
+
 From code
-a. Set configuration file (odc.conf).
+
+a. Set configuration file (odc.conf)
+
 '''
 [Openstack]
 controller_ip: 127.0.0.1
@@ -24,7 +27,8 @@ node_name: vim_mane
 server_url: http://pushgateway:9091/metrics
 '''  
 
-b. Execute the probe  
+b. Execute the probe
+  
 '''
 sudo pyhton opensdatacollector.py
 '''
