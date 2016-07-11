@@ -10,13 +10,13 @@ Supported monitoring metrics are:
 ### Dependencies
  * python 2.7
 
-Run monitoring probe:
+###Run monitoring probe:
 
 From code
 
 a. Set configuration file (odc.conf)
 
-'''
+```
 [Openstack]
 controller_ip: 127.0.0.1
 keystone_url: http://192.168.1.231:5000/v2.0/tokens
@@ -25,13 +25,13 @@ node_name: vim_mane
 
 [Prometheus]
 server_url: http://pushgateway:9091/metrics
-'''  
+``` 
 
 b. Execute the probe
   
-'''
+```
 sudo pyhton opensdatacollector.py
-'''
+```
 
 
 ###Lead Developers
