@@ -1,0 +1,28 @@
+2016-04-20 15:58:33,656 WARNING Error: <urlopen error timed out>
+2016-04-20 15:58:33,657 INFO SP Data Collector
+2016-04-20 15:58:33,657 INFO Promth P/W Server http://sp.int2.sonata-nfv.eu:9091/metrics
+2016-04-20 15:58:33,657 INFO Monitoring Node VM_VNF_1
+2016-04-20 15:59:04,263 WARNING Error: <urlopen error timed out>
+2016-04-20 15:59:04,264 INFO SP Data Collector
+2016-04-20 15:59:04,264 INFO Promth P/W Server http://sp.int2.sonata-nfv.eu:9091/metrics
+2016-04-20 15:59:04,264 INFO Monitoring Node VM_VNF_1
+2016-07-01 09:52:08,608 WARNING Error: <urlopen error timed out>
+2016-07-01 09:52:08,609 INFO SP Data Collector
+2016-07-01 09:52:08,609 INFO Promth P/W Server http://pushgateway:9091/metrics
+2016-07-01 09:52:08,609 INFO Monitoring Node LOCAL_VNF_1
+2016-07-01 09:55:49,520 WARNING Error: <urlopen error timed out>
+2016-07-01 09:55:49,521 INFO SP Data Collector
+2016-07-01 09:55:49,521 INFO Promth P/W Server http://pushgateway:9091/metrics
+2016-07-01 09:55:49,521 INFO Monitoring Node LOCAL_VNF_1
+2016-07-01 10:04:04,984 WARNING Error: <urlopen error timed out>
+2016-07-01 10:04:04,985 INFO SP Data Collector
+2016-07-01 10:04:04,985 INFO Promth P/W Server http://pushgateway:9091/metrics
+2016-07-01 10:04:04,985 INFO Monitoring Node LOCAL_VNF_1
+2016-07-01 10:08:06,344 WARNING Error: <urlopen error timed out>
+2016-07-01 10:08:06,344 INFO SP Data Collector
+2016-07-01 10:08:06,345 INFO Promth P/W Server http://pushgateway:9091/metrics
+2016-07-01 10:08:06,345 INFO Monitoring Node LOCAL_VNF_1
+2016-07-01 10:09:57,544 WARNING Error: <urlopen error timed out>
+2016-07-01 10:09:57,545 INFO SP Data Collector
+2016-07-01 10:09:57,545 INFO Promth P/W Server http://pushgateway:9091/metrics
+2016-07-01 10:09:57,545 INFO Monitoring Node LOCAL_VNF_1
