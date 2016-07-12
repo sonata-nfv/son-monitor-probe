@@ -35,6 +35,6 @@ The following lead developers are responsible for this repository and have admin
  * Panos Trakadas  (trakadasp)
  * Panos Karkazis  (pkarkazis)
 
- #### Feedback-Chanel
+### Feedback-Chanel
 * You may use the mailing list sonata-dev@lists.atosresearch.eu
 * Please use the GitHub issues to report bugs.
