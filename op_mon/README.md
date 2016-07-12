@@ -1,5 +1,5 @@
 #son-vim-openstack-probe 
-Sonata's vim (openstack) monitoring client is used in order to gather monitoring data from VIM and push them to monitoring server. 
+Sonata's vim monitoring client is used in order to gather monitoring data from VIM infrastructure (openstack) and push them to monitoring server 
 
 Supported monitoring metrics are:
  * Total/used Cores
@@ -15,7 +15,6 @@ To contribute to the development of the SONATA monitoring probes you have to for
 
 
 ### Installation
-
 From code
 
 a. Set configuration file (odc.conf)
@@ -39,7 +38,7 @@ sudo pyhton opensdatacollector.py
 
 ### License
 
-This [SOFTWARE] is published under Apache 2.0 license. Please see the LICENSE file for more details.
+This son-vim-probe is published under Apache 2.0 license. Please see the LICENSE file for more details.
 
 ###Lead Developers
 

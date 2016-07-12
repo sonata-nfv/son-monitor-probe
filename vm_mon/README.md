@@ -10,9 +10,13 @@ Supported monitoring metrics are:
 
 ### Dependencies
  * python 2.7
+ * [VmMonProbe](https://pypi.python.org/pypi/VmMonProbe) >=0.1.8 (Apache 2.0)
  
-Run monitoring probe:
+### Development
+To contribute to the development of the SONATA monitoring probes you have to fork the repository, commit new code and create pull requests.
 
+
+### Installation
 a. From code
 ```
 export PROM_SRV=http://pushgateway:9091/metrics
@@ -32,8 +36,18 @@ sudo pip install VmMonProbe
 sudo python -c 'from vm_mon_probe import probe; probe().run("TEST_VNF_1","http://pushgateway.eu:9091/metrics")'
 ```
 
+## License
+
+This [SOFTWARE] is published under Apache 2.0 license. Please see the LICENSE file for more details.
+
 ###Lead Developers
+
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
 
- * Panos Trakadas (trakadasp)
- * Panos Karkazis (pkarkazis)
+ * Panos Trakadas  (trakadasp)
+ * Panos Karkazis  (pkarkazis)
+
+ #### Feedback-Chanel
+
+* You may use the mailing list sonata-dev@lists.atosresearch.eu
+* Please use the GitHub issues to report bugs.
