@@ -38,7 +38,7 @@ sudo python -c 'from vm_mon_probe import probe; probe().run("TEST_VNF_1","http:/
 
 ## License
 
-This [SOFTWARE] is published under Apache 2.0 license. Please see the LICENSE file for more details.
+This son-vm-probe is published under Apache 2.0 license. Please see the LICENSE file for more details.
 
 ###Lead Developers
 
