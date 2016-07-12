@@ -31,7 +31,7 @@ import datetime,time,logging
 from configure import configuration
 from servers import server
 
-controller_ip = "192.168.1.231"
+controller_ip = "127.0.0.1"
 
 
 def init():
