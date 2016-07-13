@@ -24,7 +24,7 @@ a. Set configuration file (odc.conf)
 controller_ip: 127.0.0.1
 keystone_url: http://127.0.0.1:5000/v2.0/tokens
 tenants: [{"name":"tent_name", "user_name": "admin", "password":"admin_pass"}]
-node_name: vim_mane
+node_name: vim_name
 
 [Prometheus]
 server_url: http://pushgateway:9091/metrics
