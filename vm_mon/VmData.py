@@ -54,8 +54,8 @@ class vmdt:
         vm_mem_total_MB = "# TYPE vm_mem_total_MB gauge" + '\n'
         vm_net_rx_MB = "# TYPE vm_net_rx_MB gauge" + '\n'
         vm_net_tx_MB = "# TYPE vm_net_tx_MB gauge" + '\n'
-        vm_net_rx_Bps = "# TYPE vm_net_rx_Bps gauge" + '\n'
-        vm_net_tx_Bps = "# TYPE vm_net_tx_Bps gauge" + '\n'
+        vm_net_rx_bps = "# TYPE vm_net_rx_bps gauge" + '\n'
+        vm_net_tx_bps = "# TYPE vm_net_tx_bps gauge" + '\n'
         vm_net_rx_pps = "# TYPE vm_net_rx_pps gauge" + '\n'
         vm_net_tx_pps = "# TYPE vm_net_tx_pps gauge" + '\n'
         vm_disk_usage_perc = "# TYPE vm_disk_usage_perc gauge" + '\n'
@@ -73,14 +73,14 @@ class vmdt:
         for cp in data_['network']:   
             vm_net_rx_MB += "vm_net_rx_MB {id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_MB'])+ '\n'
             vm_net_tx_MB += "vm_net_tx_MB{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_MB'])+ '\n'
-            if cp['rx_Bps'] != -1:
-                vm_net_rx_Bps += "vm_net_rx_Bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_Bps'])+ '\n'
+            if cp['rx_bps'] != -1:
+                vm_net_rx_bps += "vm_net_rx_bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_bps'])+ '\n'
             else:
-                vm_net_rx_Bps =''
-            if cp['tx_Bps'] != -1:
-                vm_net_tx_Bps += "vm_net_tx_Bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_Bps'])+ '\n'
+                vm_net_rx_bps =''
+            if cp['tx_bps'] != -1:
+                vm_net_tx_bps += "vm_net_tx_bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_bps'])+ '\n'
             else:
-                vm_net_tx_Bps=''
+                vm_net_tx_bps=''
             if cp['rx_pps'] != -1:
                 vm_net_rx_pps += "vm_net_rx_pps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_pps'])+ '\n'
             else:
@@ -96,7 +96,7 @@ class vmdt:
             vm_disk_used_1k_blocks += "vm_disk_used_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['used'])+ '\n'
             vm_disk_total_1k_blocks += "vm_disk_total_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['size_1k_block'])+ '\n'
             
-        data = vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks  + vm_disk_total_1k_blocks + vm_net_rx_Bps + vm_net_tx_Bps + vm_net_rx_pps + vm_net_tx_pps   
+        data = vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks  + vm_disk_total_1k_blocks + vm_net_rx_bps + vm_net_tx_bps + vm_net_rx_pps + vm_net_tx_pps   
         return data
         
     
@@ -122,8 +122,8 @@ class vmdt:
             netif ={}
             nif[0] = nif[0].replace(':','')
             netif["interface"] = nif[0]
-            netif["rx_B"] = int(nif[1]) 
-            netif["tx_B"] = int(nif[9])
+            netif["rx_b"] = int(nif[1]) 
+            netif["tx_b"] = int(nif[9])
             netif["rx_pks"] = int(nif[2]) 
             netif["tx_pks"] = int(nif[10])
             netif["rx_error"] = int(nif[3]) 
@@ -143,17 +143,19 @@ class vmdt:
             else:
                 netif["tx_pps"] = -1
             #RX Bytes per sec
-            lv = int(self.getlastVal(nif[0],"rx_B"))
+            lv = int(self.getlastVal(nif[0],"rx_b"))
             if lv != -1:     
-                netif["rx_Bps"] = int(nif[1]) - lv
+                netif["rx_bps"] = int(nif[1]) - lv
+                netif["rx_bps"] = 8*int(netif["rx_bps"])
             else:
-                netif["rx_Bps"] = -1
+                netif["rx_bps"] = -1
             #TX Bytes per sec
-            lv = int(self.getlastVal(nif[0],"tx_B"))
+            lv = int(self.getlastVal(nif[0],"tx_b"))
             if lv != -1:    
-                netif["tx_Bps"] = int(nif[9]) - lv
+                netif["tx_bps"] = int(nif[9]) - lv
+                netif["tx_bps"] = 8*int(netif["tx_bps"])
             else: 
-                netif["tx_Bps"] = -1
+                netif["tx_bps"] = -1
             netif["rx_MB"] = round(int(nif[1])/1000000.0,2) 
             netif["tx_MB"] = round(int(nif[9])/1000000.0,2)
             netifs.append(netif)

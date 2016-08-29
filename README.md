@@ -13,6 +13,7 @@ To contribute to the development of the SONATA monitoring probes you have to for
 ## License
 SONATA mmonitoring probes are published under Apache 2.0 license. Please see the LICENSE file for more details.
 
+
 #### Lead Developers
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
 
