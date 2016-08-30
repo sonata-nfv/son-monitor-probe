@@ -36,7 +36,6 @@ controller_ip = "127.0.0.1"
 
 def init():
     global keystone_url
-    global prometh_server
     global node_name
     global tenants
     global logger
@@ -44,7 +43,6 @@ def init():
 
     conf = configuration("odc.conf")     
     keystone_url = conf.ConfigSectionMap("Openstack")['keystone_url']
-    prometh_server = conf.ConfigSectionMap("Prometheus")['server_url']
     node_name = conf.ConfigSectionMap("Openstack")['node_name']
     tenants = json.loads(conf.ConfigSectionMap("Openstack")['tenants'])
         
@@ -57,7 +55,6 @@ def init():
     logger.setLevel(logging.INFO)
     logger.info('Openstack Data Collector')
     logger.info('keystone_url: '+keystone_url)
-    logger.info('prometh_server: '+prometh_server)
     logger.info('node_name: '+node_name)
     logger.info('tenants: '+json.dumps(tenants))
 
@@ -119,7 +116,22 @@ def getLimits(token):
         logger.warning('Error: '+str(e))
     except ValueError, e:
         logger.warning('Error: '+str(e))
-        
+
+def pushdata(server,data,label,tenant_name):
+    try:
+        req = urllib2.Request(server+"/job/"+label+"/instance/"+node_name+"/vim_tenant/"+tenant_name)
+        req.add_header('Content-Type','text/html')
+        req.get_method = lambda: 'PUT'
+        response=urllib2.urlopen(req,data)
+        code = response.code
+        logger.info('Response Code: '+str(code))
+
+    except urllib2.HTTPError, e:
+        logger.warning('Error: '+str(e))
+    except urllib2.URLError, e:
+        logger.warning('Error: '+str(e))
+
+
 def getVms(creds):
     servers = {}
     try: 
@@ -165,27 +177,18 @@ def getVmStats(uuid, creds):
         print e.args
         logger.warning('Error: '+str(e))
         
-def postLimits(limits):
+def postLimits(limits, tenant_name, urls):
     #metricKeys = ['maxServerMeta','maxPersonality','maxImageMeta','maxPersonalitySize','maxTotalRAMSize','maxSecurityGroupRules','maxTotalKeypairs','totalRAMUsed','maxSecurityGroups', 'totalFloatingIpsUsed', 'totalInstancesUsed', 'totalSecurityGroupsUsed', 'maxTotalFloatingIps', 'maxTotalInstances', 'totalCoresUsed', 'maxTotalCores']
     data = ''
     for key in limits["limits"]["absolute"].keys():
         data +="# TYPE " + "vim_"+key + " gauge" + '\n' + "vim_"+key +" "+ str(limits["limits"]["absolute"][key]) + '\n'
         
     logger.info('Post Limits: \n'+data)
-    try: 
-        req = urllib2.Request(prometh_server+"/job/vim_limits/instance/"+node_name)
-        req.add_header('Content-Type','text/html')
-        req.get_method = lambda: 'PUT'
-        response=urllib2.urlopen(req,data)
-        code = response.code
-        logger.info('Response Code: \n'+str(code))      
-    except urllib2.HTTPError, e:
-        logger.warning('Error: '+str(e))
-    except urllib2.URLError, e:
-        logger.warning('Error: '+str(e))
+    for url in urls:
+    pushdata(url,data,"limits",tenant_name)
     
 
-def postVMmetrics(vms):
+def postVMmetrics(vms, tenant_name, urls):
     #vm_p_states = {'ACTIVE':'1', 'BUILDING':'2', 'PAUSED':'3', 'SUSPENDED':'4', 'STOPPED':'5', 'SHUTOFF':'5', 'RESCUED':'6', 'RESIZED':'7', 'SOFT_DELETED':'8', 'DELETED':'9', 'ERROR':'10', 'SHELVED':'11', 'SHELVED_OFFLOADED':'12', 'ALLOW_SOFT_REBOOT':'13', 'ALLOW_HARD_REBOOT':'14', 'ALLOW_TRIGGER_CRASH_DUMP':'15'}
     
     #Number of servers
@@ -211,18 +214,8 @@ def postVMmetrics(vms):
     data += vm_update + vm_pow_state + vm_status
 
     logger.info('Post vm metrics: \n'+data)
-    try: 
-        req = urllib2.Request(prometh_server+"/job/vms/instance/"+node_name)
-        req.add_header('Content-Type','text/html')
-        req.get_method = lambda: 'PUT'
-        response=urllib2.urlopen(req,data)
-        code = response.code
-        logger.info('Response Code: '+str(code)) 
-        
-    except urllib2.HTTPError, e:
-        logger.warning('Error: '+str(e))
-    except urllib2.URLError, e:
-        logger.warning('Error: '+str(e))
+    for url in urls:
+        pushdata(url,data,"vms",tenant_name)
 
 def string2int(str_status):
     code = ""
@@ -250,7 +243,7 @@ if __name__ == "__main__":
     for tenant in tenants:
         token = getToken(tenant)
         limits = getLimits(token)
-        postLimits(limits)
+        postLimits(limits, tenant["name"], tenant["pushgw_url"])
         vms = getVms(token)
-        postVMmetrics(vms['servers'])
+        postVMmetrics(vms['servers'], tenant["name"], tenant["pushgw_url"])
         
