@@ -31,7 +31,6 @@ import datetime,time,logging
 from configure import configuration
 from servers import server
 
-controller_ip = "127.0.0.1"
 
 
 def init():
@@ -39,13 +38,13 @@ def init():
     global node_name
     global tenants
     global logger
-    
+    global controller_ip
 
     conf = configuration("odc.conf")     
     keystone_url = conf.ConfigSectionMap("Openstack")['keystone_url']
     node_name = conf.ConfigSectionMap("Openstack")['node_name']
     tenants = json.loads(conf.ConfigSectionMap("Openstack")['tenants'])
-        
+    controller_ip = conf.ConfigSectionMap("Openstack")['controller_ip']  
     logger = logging.getLogger('dataCollector')
     hdlr = logging.FileHandler('dataCollector.log', mode='w')
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
