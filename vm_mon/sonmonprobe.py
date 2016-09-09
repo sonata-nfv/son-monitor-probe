@@ -88,7 +88,7 @@ def getMetaData():
         req = urllib2.Request(url)
         req.add_header('Content-Type','application/json')
         
-        response=urllib2.urlopen(req, timeout = 3)
+        response=urllib2.urlopen(req, timeout = 10)
         code = response.code
         data = json.loads(response.read())
         #print json.dumps(data)
