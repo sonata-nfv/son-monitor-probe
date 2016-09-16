@@ -39,7 +39,7 @@ class server(object):
         self.imageId = server_["image"]["id"]
         self.launched = server_["OS-SRV-USG:launched_at"]
         self.flavorId = server_["flavor"]["id"]
-        self.security_groups = server_["security_groups"]
+        #self.security_groups = server_["security_groups"]
         self.name = server_["name"]
         self.useId = server_["user_id"]
         self.tenantId = server_["tenant_id"]
@@ -47,3 +47,31 @@ class server(object):
         
     def addDgn(self,diagnostics_):
         self.diagnostics = diagnostics_
+
+    def getAddr(self):
+        nets = self.addresses.keys()
+        netlabels=[]
+        label=""
+        i=0
+        if nets:
+            label=", "
+            for net in nets:
+                i=i+1
+                if i > 1:
+                    label +=", "
+                network={}
+                network['label'] = "network_"+str(i)
+                network['name'] = net
+                network['IPs'] = []
+                label += "network_"+str(i)+"=\""+network['name']
+                for interface in self.addresses[net]:
+                    network['IPs'].append(interface['addr'])
+                    label += ":"+interface['addr']
+                label += "\""
+                netlabels.append(network)
+
+        return label
+
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
