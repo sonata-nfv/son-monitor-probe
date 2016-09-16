@@ -146,7 +146,7 @@ def getVms(creds):
             if ops_svr["status"] == "ACTIVE":
                 srv.addDgn(getVmStats(ops_svr["id"],creds))
             else:
-                 srv.addDgn({}) 
+                srv.addDgn({}) 
         return data
         
     except urllib2.HTTPError, e:
@@ -207,9 +207,12 @@ def postVMmetrics(vms, tenant_name, urls):
     vm_status = "# TYPE vm_status gauge" + '\n'
     
     for vm in vms:
-        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"}" + str(date2int(vm['updated'])) + '\n'
-        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + str(vm['OS-EXT-STS:power_state']) + '\n'
-        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + string2int(vm['status']) + '\n'
+        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(date2int(vm['updated'])) + '\n'
+        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(vm['OS-EXT-STS:power_state']) + '\n'
+        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + string2int(vm['status']) + '\n'
+        #vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"}" + str(date2int(vm['updated'])) + '\n'
+        #vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + str(vm['OS-EXT-STS:power_state']) + '\n'
+        #vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + string2int(vm['status']) + '\n'
     data += vm_update + vm_pow_state + vm_status
 
     logger.info('Post vm metrics: \n'+data)
