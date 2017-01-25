@@ -21,9 +21,9 @@ a. Set configuration file (odc.conf)
 
 ```
 [Openstack]
-controller_ip: 127.0.0.1
-keystone_url: http://127.0.0.1:5000/v2.0/tokens
-tenants:  [{"name": "admin","user_name": "name","password": "password","pushgw_url": ["http://pushgateway:9091/metrics"]}]
+controller_ip: <controller_ip>
+keystone_url: http://<keystone_ip>:5000/v2.0/tokens
+tenants:  [{"name": "admin","user_name": "name","password": "password","pushgw_url": ["http://<pushgateway>:<port>/metrics"]}]
 node_name: pop_vim
 ``` 
 
