@@ -40,7 +40,7 @@ sudo python ODLdatacollector.py
 b. Using container
 ```
 sudo docker build -t son-odl-probe .
-sudo docker run -d --name son-odl-probe -e NODE_NAME=VNF_1 -e ODL_SRV=http://<odl_server>:<port> -e PROM_SRV=http://<pushgateway>:<port>/metrics -e ODL_USER=<user_name> -e export ODL_PASS=<password> son-odl-probe
+sudo docker run -d --name son-odl-probe -e NODE_NAME=VNF_1 -e ODL_SRV=http://<odl_server>:<port> -e PROM_SRV=http://<pushgateway>:<port>/metrics -e ODL_USER=[{"user_name": <user_name>, "password":<password>}] -e export ODL_PASS=<password> son-odl-probe
 ```
 
 
