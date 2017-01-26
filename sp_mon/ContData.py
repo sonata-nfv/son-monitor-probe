@@ -26,7 +26,7 @@ acknowledge the contributions of their colleagues of the SONATA
 partner consortium (www.sonata-nfv.eu).
 '''
 
-import json
+import json,time,datetime
 from Statistics import Statistics
 __author__="panos"
 __date__ ="$Apr 8, 2016 1:30:54 PM$"
@@ -45,6 +45,7 @@ class cntdt:
 
     def prom_parser(self):
         #containers metric types
+        timestamp = " "+str(int(datetime.datetime.now().strftime("%s")) * 1000)
         cnt_created = "# TYPE cnt_created counter" + '\n'
         cnt_status = "# TYPE cnt_status gauge" + '\n'
         cnt_cpu_perc = "# TYPE cnt_cpu_perc gauge" + '\n'
@@ -58,16 +59,16 @@ class cntdt:
         cnt_status = "# TYPE cnt_status gauge" + '\n'
 
         for cnt in self.data:
-            cnt_created += "cnt_created{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(cnt['created'])+ '\n'
-            cnt_status += "cnt_status{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['status']))+ '\n'
-            cnt_cpu_perc += "cnt_cpu_perc{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}"+str(self.checkNone(cnt['stats']['cpu_perc']))+ '\n'
-            cnt_mem_perc += "cnt_mem_perc{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}"+str(self.checkNone(cnt['stats']['mem_perc']))+ '\n'
-            cnt_mem_usage_MB += "cnt_mem_usage_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}"+str(self.checkNone(cnt['stats']['mem_usage_MB']))+ '\n'
-            cnt_mem_limit_MB += "cnt_mem_limit_MB {id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['mem_limit_MB']))+ '\n'
-            cnt_net_rx_MB += "cnt_net_rx_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['net_rx_MB']))+ '\n'
-            cnt_net_tx_MB += "cnt_net_tx_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['net_tx_MB']))+ '\n'
-            cnt_block_in_MB += "cnt_block_in_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['block_in_MB']))+ '\n'
-            cnt_block_ou_MB += "cnt_block_ou_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['block_ou_MB']))+ '\n'
+            cnt_created += "cnt_created{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(cnt['created']) + timestamp + '\n'
+            cnt_status += "cnt_status{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['status'])) + timestamp + '\n'
+            cnt_cpu_perc += "cnt_cpu_perc{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}"+str(self.checkNone(cnt['stats']['cpu_perc'])) + timestamp + '\n'
+            cnt_mem_perc += "cnt_mem_perc{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}"+str(self.checkNone(cnt['stats']['mem_perc'])) + timestamp + '\n'
+            cnt_mem_usage_MB += "cnt_mem_usage_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}"+str(self.checkNone(cnt['stats']['mem_usage_MB'])) + timestamp + '\n'
+            cnt_mem_limit_MB += "cnt_mem_limit_MB {id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['mem_limit_MB'])) + timestamp + '\n'
+            cnt_net_rx_MB += "cnt_net_rx_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['net_rx_MB'])) + timestamp + '\n'
+            cnt_net_tx_MB += "cnt_net_tx_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['net_tx_MB'])) + timestamp + '\n'
+            cnt_block_in_MB += "cnt_block_in_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['block_in_MB'])) + timestamp + '\n'
+            cnt_block_ou_MB += "cnt_block_ou_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['block_ou_MB'])) + timestamp + '\n'
 
         data = cnt_created + cnt_cpu_perc +cnt_mem_perc + cnt_mem_usage_MB + cnt_mem_limit_MB + cnt_net_rx_MB + cnt_net_tx_MB + cnt_block_in_MB + cnt_block_ou_MB + cnt_status
         return data

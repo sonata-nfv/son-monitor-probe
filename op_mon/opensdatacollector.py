@@ -177,10 +177,11 @@ def getVmStats(uuid, creds):
         logger.warning('Error: '+str(e))
         
 def postLimits(limits, tenant_name, urls):
+    timestamp = " "+str(int(datetime.datetime.now().strftime("%s")) * 1000)
     #metricKeys = ['maxServerMeta','maxPersonality','maxImageMeta','maxPersonalitySize','maxTotalRAMSize','maxSecurityGroupRules','maxTotalKeypairs','totalRAMUsed','maxSecurityGroups', 'totalFloatingIpsUsed', 'totalInstancesUsed', 'totalSecurityGroupsUsed', 'maxTotalFloatingIps', 'maxTotalInstances', 'totalCoresUsed', 'maxTotalCores']
     data = ''
     for key in limits["limits"]["absolute"].keys():
-        data +="# TYPE " + "vim_"+key + " gauge" + '\n' + "vim_"+key +" "+ str(limits["limits"]["absolute"][key]) + '\n'
+        data +="# TYPE " + "vim_"+key + " gauge" + '\n' + "vim_"+key +" "+ str(limits["limits"]["absolute"][key]) + timestamp + '\n'
         
     logger.info('Post Limits: \n'+data)
     for url in urls:
@@ -188,18 +189,19 @@ def postLimits(limits, tenant_name, urls):
     
 
 def postVMmetrics(vms, tenant_name, urls):
+    timestamp = " "+str(int(datetime.datetime.now().strftime("%s")) * 1000)
     #vm_p_states = {'ACTIVE':'1', 'BUILDING':'2', 'PAUSED':'3', 'SUSPENDED':'4', 'STOPPED':'5', 'SHUTOFF':'5', 'RESCUED':'6', 'RESIZED':'7', 'SOFT_DELETED':'8', 'DELETED':'9', 'ERROR':'10', 'SHELVED':'11', 'SHELVED_OFFLOADED':'12', 'ALLOW_SOFT_REBOOT':'13', 'ALLOW_HARD_REBOOT':'14', 'ALLOW_TRIGGER_CRASH_DUMP':'15'}
     
     #Number of servers
     data = ""
-    data +="# TYPE vms_sum gauge" + '\n' + "vms_sum "+ str(len(vms)) + '\n'
+    data +="# TYPE vms_sum gauge" + '\n' + "vms_sum "+ str(len(vms)) + timestamp + '\n'
     #data +="# TYPE vms_possible_states{ACTIVE:\""+vm_p_states['ACTIVE']+"\", BUILDING:\""+vm_p_states['BUILDING']+"\", PAUSED:\""+vm_p_states['PAUSED']+"\", SUSPENDED:\""+vm_p_states['SUSPENDED']+"\", STOPPED:\""+vm_p_states['STOPPED']+"\", RESCUED:\""+vm_p_states['RESCUED']+"\", RESIZED:\""+vm_p_states['RESIZED']+"\", SOFT_DELETED:\""+vm_p_states['SOFT_DELETED']+"\", DELETED:\""+vm_p_states['DELETED']+"\", ERROR:\""+vm_p_states['ERROR']+"\", SHELVED:\""+vm_p_states['SHELVED']+"\", SHELVED_OFFLOADED:\""+vm_p_states['SHELVED_OFFLOADED']+"\", ALLOW_SOFT_REBOOT:\""+vm_p_states['ALLOW_SOFT_REBOOT']+"\", ALLOW_SOFT_REBOOT:\""+vm_p_states['ALLOW_TRIGGER_CRASH_DUMP']+"\", ALLOW_TRIGGER_CRASH_DUMP:\""+vm_p_states['ALLOW_SOFT_REBOOT']+"\"} gauge" + '\n' + "vms_possible_states 1"+ '\n'
     
     #vm_state
     vm_states = getStates(vms)
     data +="# TYPE vms_state gauge" + '\n'
     for key in vm_states.keys():
-        data += "vms_state{state=\""+key+"\"} "+ str(vm_states[key]) + '\n'
+        data += "vms_state{state=\""+key+"\"} "+ str(vm_states[key]) + timestamp + '\n'
     
     #vms
     vm_update = "# TYPE vm_last_update gauge" + '\n'
@@ -207,9 +209,9 @@ def postVMmetrics(vms, tenant_name, urls):
     vm_status = "# TYPE vm_status gauge" + '\n'
     
     for vm in vms:
-        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(date2int(vm['updated'])) + '\n'
-        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(vm['OS-EXT-STS:power_state']) + '\n'
-        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + string2int(vm['status']) + '\n'
+        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(date2int(vm['updated'])) + timestamp + '\n'
+        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(vm['OS-EXT-STS:power_state']) + timestamp + '\n'
+        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + string2int(vm['status']) + timestamp + '\n'
         #vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"}" + str(date2int(vm['updated'])) + '\n'
         #vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + str(vm['OS-EXT-STS:power_state']) + '\n'
         #vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + string2int(vm['status']) + '\n'

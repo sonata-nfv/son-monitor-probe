@@ -96,10 +96,13 @@ def getMetaData():
     
     except urllib2.HTTPError, e:
         logger.warning('Error: '+str(e))
+        pass
     except urllib2.URLError, e:
         logger.warning('Error: '+str(e))
+        pass
     except ValueError, e:
         logger.warning('Error: '+str(e))
+        pass
 
 def collectVM(id_):
     global vm_dt
