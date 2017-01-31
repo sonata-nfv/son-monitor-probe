@@ -14,23 +14,18 @@ class valdt:
     def __init__(self):
         self.prev_dt = None
         self.curr_dt = None
-        #self.id = id_
-        #self.prv_mon_data = lsdt_
-        #self.mon_data = {}
-        #self.mon_data['ram'] = self.getRAM()
-        #self.mon_data['cpu'] = self.getCPU() 
-        #self.mon_data['network'] = self.getNetTrBytes()
-        #self.mon_data['disk'] = self.getdiskUsage()
+        
         
 
-    def validateDT(self,dt_):
-
+    def validateDT(self,enable_, dt_):
         metric_hdr = ''
         dt2go = ''
+        
+        if not enable_:
+            return dt_
+        
         if self.prev_dt is None:
-            #First interation
             self.prev_dt = self.str2obj(dt_)
-            #print json.dumps(self.prev_dt)
             return dt_
         else:
             flag = False
@@ -51,30 +46,46 @@ class valdt:
                         self.prev_dt[c_name]['value'] = c_val
                         self.prev_dt[c_name]['last_update'] = c_updated
                         continue
-                    if self.chDetla(c_name, c_val):
+                    if self.chDetla(c_name, c_val, c_updated):
                         if not flag:
-                            dt2go += metric_hdr + '\n'
+                            dt2go += metric_hdr  + '\n'
                             flag = True
-                        dt2go += line+ '\n'
-                        self.prev_dt[c_name]['value'] = c_val
+                        dt2go += line + '\n'
                         continue
-                    if self.chTime(c_name, c_updated):
+                    if self.chTime(c_name, c_val, c_updated):
                         if not flag:
-                            dt2go += metric_hdr + '\n'
+                            dt2go += metric_hdr +'\n'
                             flag = True
-                        dt2go += line+ '\n'
-                        self.prev_dt[c_name]['value'] = c_val
-                        self.prev_dt[c_name]['last_update'] = c_updated
+                        dt2go += line + '\n'
                         continue
             return dt2go
                     
                 
                     
-    def chDetla(self, c_name, c_val):
-        return True
+    def chDetla(self, c_name_, c_val_, c_updated_):
+        #print ""+self.prev_dt[c_name_]['value']+" "+c_val_
+        if c_name_ in self.prev_dt:
+            if float(self.prev_dt[c_name_]['value']) == 0 and float(c_val_) == 0:
+                return False
+            if float(self.prev_dt[c_name_]['value']) == 0:
+                denom = c_val_
+            else:
+                denom = self.prev_dt[c_name_]['value']
+             
+            if (abs(float(self.prev_dt[c_name_]['value']) - float(c_val_))/float(denom) > 0.1):
+                self.prev_dt[c_name_]['value'] = c_val_
+                self.prev_dt[c_name_]['last_update'] = c_updated_
+                return True
+        return False
         
-    def chTime(self, c_name, c_val):
-        return True
+    def chTime(self,c_name_, c_val_, c_updated_):
+        if c_name_ in self.prev_dt:
+            if int(c_updated_) - int(self.prev_dt[c_name_]['last_update']) > 5*60*1000:
+                self.prev_dt[c_name_]['value'] = c_val_
+                self.prev_dt[c_name_]['last_update'] = c_updated_
+                return True
+            else:
+                return False
     
     
     def str2obj(self, data_):
@@ -87,10 +98,9 @@ class valdt:
             
 
     def metric_obj(self, ln_,dt_):
-        #ptr = ln_.find('}',0)
-        name = self.getMetricName(ln_, 'name') #ln_[0:ptr+1]
-        val = self.getMetricName(ln_, 'value') #ln_[ptr+1:ln_.find(' ',ptr)].strip()
-        updated = self.getMetricName(ln_, 'time') #ln_[ln_.find(' ',ptr+1):len(ln_)].strip()
+        name = self.getMetricName(ln_, 'name')
+        val = self.getMetricName(ln_, 'value')
+        updated = self.getMetricName(ln_, 'time')
         dt_[name]={}
         dt_[name]['value'] = val
         dt_[name]['last_update'] = updated

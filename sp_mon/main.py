@@ -32,6 +32,7 @@ import urllib2, time, logging
 import json, urllib2, os
 from threading import  Thread    
 from VmData import vmdt
+from DtFiltering import valdt 
 from ContData import cntdt
 from configure import configuration
 from logging.handlers import RotatingFileHandler
