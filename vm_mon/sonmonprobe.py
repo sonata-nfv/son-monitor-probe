@@ -82,6 +82,9 @@ def postNode(node_,type_, data_):
         logger.warning('Error: '+str(e))
     except urllib2.URLError, e:
         logger.warning('Error: '+str(e))
+    except:
+        logger.warning('Generic Error on postNode function')
+        pass
         
 def getMetaData():
     try:
@@ -101,8 +104,8 @@ def getMetaData():
     except urllib2.URLError, e:
         logger.warning('Error: '+str(e))
         pass
-    except ValueError, e:
-        logger.warning('Error: '+str(e))
+    except:
+        logger.warning('Generic Error on getMetaData function')
         pass
 
 def collectVM(id_):
