@@ -118,7 +118,7 @@ def getLimits(token):
 
 def pushdata(server,data,label,tenant_name):
     try:
-        req = urllib2.Request(server+"/job/"+label+"/instance/"+node_name+"/vim_tenant/"+tenant_name)
+        req = urllib2.Request(server+"/vim_job/"+label+"/vim_instance/"+node_name+"/vim_tenant/"+tenant_name)
         req.add_header('Content-Type','text/html')
         req.get_method = lambda: 'PUT'
         response=urllib2.urlopen(req,data)
