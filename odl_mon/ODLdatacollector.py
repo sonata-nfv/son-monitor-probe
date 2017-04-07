@@ -115,7 +115,7 @@ def postNode(node):
         
     data = port_state_live+port_state_blocked+port_state_link_down+port_maximum_speed+port_current_speed+port_receive_frame_error+port_packets_transmitted+port_packets_received+port_collision_count+port_receive_over_run_error+port_receive_crc_error+port_transmit_errors+port_receive_drops+port_transmit_drops+port_receive_errors
     #print data
-    url = prometh_server+"/odl_job/ports/odl_instance/"+node_name
+    url = prometh_server+"/job/ports/instance/"+node_name
     logger.info('Post on: \n'+url)
     logger.info('Post ports metrics: \n'+data)
     try: 

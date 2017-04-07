@@ -71,7 +71,7 @@ def init():
     logger.info('Monitoring Node '+node_name)
 
 def postNode(node_,type_, data_):
-    url = prometh_server+"/sp_job/"+type_+"/sp_instance/"+node_
+    url = prometh_server+"/job/"+type_+"/instance/"+node_
     logger.info('Post on: \n'+url)
     try: 
         req = urllib2.Request(url)

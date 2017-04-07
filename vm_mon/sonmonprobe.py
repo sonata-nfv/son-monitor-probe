@@ -67,7 +67,7 @@ def init():
 
 def postNode(node_,type_, data_):
     #print data
-    url = prometh_server+"/vm_job/"+type_+"/vm_instance/"+node_
+    url = prometh_server+"/job/"+type_+"/instance/"+node_
     #print url
     logger.info('Post on: \n'+url)
     #logger.info('Post ports metrics: \n'+data_)
