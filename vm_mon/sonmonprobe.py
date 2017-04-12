@@ -30,7 +30,7 @@ __author__="panos"
 __date__ ="$Apr 20, 2016 1:11:43 PM$"
 
 import urllib2, time, logging                                                                                                       
-import json,urllib2,os
+import json, urllib2, os, subprocess
 from threading import  Thread
 from VmData import vmdt
 from DtFiltering import valdt 
@@ -57,7 +57,8 @@ def init():
     logger.addHandler(hdlr) 
     logger.setLevel(logging.WARNING)
     logger.setLevel(logging.INFO)
-    vm_id = getMetaData()
+    #vm_id = getMetaData()
+    vm_id = getUUID()
     if vm_id == None:
         vm_id = node_name
     print vm_id
@@ -85,7 +86,19 @@ def postNode(node_,type_, data_):
     except:
         logger.warning('Generic Error on postNode function')
         pass
-        
+
+def getUUID():
+    p = subprocess.Popen('sudo /rootfs/usr/sbin/dmidecode | grep UUID', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    lines = p.stdout.readlines()
+    try:
+        for line in lines:
+                ar = line.split(" ")
+                return ar[1].strip().lower()
+    except:
+        logger.warning('Error on retrieving UUID')
+        return None
+        pass
+
 def getMetaData():
     try:
         url = 'http://169.254.169.254/openstack/latest/meta_data.json'
