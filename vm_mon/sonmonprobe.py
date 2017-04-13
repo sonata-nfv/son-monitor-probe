@@ -88,7 +88,7 @@ def postNode(node_,type_, data_):
         pass
 
 def getUUID():
-    p = subprocess.Popen('sudo /rootfs/usr/sbin/dmidecode | grep UUID', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = subprocess.Popen('/rootfs/usr/sbin/dmidecode | grep UUID', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     lines = p.stdout.readlines()
     try:
         for line in lines:
