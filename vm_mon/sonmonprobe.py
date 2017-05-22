@@ -92,6 +92,7 @@ def getUUID():
     lines = p.stdout.readlines()
     try:
         for line in lines:
+            if 'UUID' in line:
                 ar = line.split(" ")
                 return ar[1].strip().lower()
     except:
