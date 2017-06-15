@@ -66,6 +66,7 @@ def init():
     vm_id = getUUID()
     if vm_id == None:
         vm_id = node_name
+    node_name +=":"+vm_id
     print vm_id
     logger.info('SP Data Collector')
     logger.info('Promth Server '+prometh_server)
@@ -87,7 +88,11 @@ def postNode(node_,type_, data_):
         logger.warning('Error: '+str(e))
 
 def getUUID():
-    p = subprocess.Popen('/rootfs/usr/sbin/dmidecode | grep UUID', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    path = '/usr/sbin/dmidecode | grep UUID'
+    print(os.path.isdir("/rootfs"))
+    if (os.path.isdir("/rootfs")):
+        path = '/rootfs'+path
+    p = subprocess.Popen(path, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     lines = p.stdout.readlines()
     try:
         for line in lines:
