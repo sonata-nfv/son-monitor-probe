@@ -92,7 +92,7 @@ def getUUID():
     path = '/usr/sbin/dmidecode | grep UUID'
     print(os.path.isdir("/rootfs"))
     if (os.path.isdir("/rootfs")):
-        path += '/rootfs'+path
+        path = '/rootfs'+path
     p = subprocess.Popen(path, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     lines = p.stdout.readlines()
     try:
