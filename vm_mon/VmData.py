@@ -49,6 +49,7 @@ class vmdt:
     def prom_parser(self):
         timestamp = " "+str(int(datetime.datetime.now().strftime("%s")) * 1000)
         #containers metric types
+        vm_up = "# TYPE vm_up gauge" + '\n'
         vm_cpu_perc = "# TYPE vm_cpu_perc gauge" + '\n'
         vm_mem_perc = "# TYPE vm_mem_perc gauge" + '\n'
         vm_mem_free_MB = "# TYPE vm_mem_free_MB gauge" + '\n'
@@ -62,7 +63,8 @@ class vmdt:
         vm_disk_usage_perc = "# TYPE vm_disk_usage_perc gauge" + '\n'
         vm_disk_used_1k_blocks = "# TYPE vm_disk_used_1k_blocks gauge" + '\n'
         vm_disk_total_1k_blocks = "# TYPE vm_disk_total_1k_blocks gauge" + '\n'
-    
+        
+        vm_up += "vm_up{id=\""+self.id+"\"}" + str(int(datetime.datetime.now().strftime("%s"))) + timestamp+ '\n'
         data_ = self.mon_data
         for cp in data_['cpu']:
             vm_cpu_perc += "vm_cpu_perc{id=\""+self.id+"\", core=\""+str(cp['core'])+"\"}" +str(cp['usage']) + timestamp + '\n'
@@ -97,7 +99,7 @@ class vmdt:
             vm_disk_used_1k_blocks += "vm_disk_used_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['used']) + timestamp+ '\n'
             vm_disk_total_1k_blocks += "vm_disk_total_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['size_1k_block']) + timestamp+ '\n'
             
-        data = vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks  + vm_disk_total_1k_blocks + vm_net_rx_bps + vm_net_tx_bps + vm_net_rx_pps + vm_net_tx_pps   
+        data = vm_up + vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks  + vm_disk_total_1k_blocks + vm_net_rx_bps + vm_net_tx_bps + vm_net_rx_pps + vm_net_tx_pps   
         return data
         
     
