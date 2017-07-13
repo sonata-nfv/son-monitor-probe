@@ -1,0 +1,10 @@
+[Unit]
+Description=Monitoring Probe 
+
+[Service]
+WorkingDirectory=/opt/Monitoring
+ExecStart=/usr/bin/python /opt/Monitoring/sonmonprobe.py
+Restart=always
+
+[Install]
+WantedBy=default.target
