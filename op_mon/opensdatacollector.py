@@ -256,9 +256,9 @@ def postVMmetrics(vms, tenant_name, urls):
     vm_status = "# TYPE vm_status gauge" + '\n'
     
     for vm in vms:
-        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(date2int(vm['updated'])) + timestamp + '\n'
-        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(vm['OS-EXT-STS:power_state']) + timestamp + '\n'
-        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + string2int(vm['status']) + timestamp + '\n'
+        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + str(date2int(vm['updated'])) + timestamp + '\n'
+        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + str(vm['OS-EXT-STS:power_state']) + timestamp + '\n'
+        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + string2int(vm['status']) + timestamp + '\n'
         #vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"}" + str(date2int(vm['updated'])) + '\n'
         #vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + str(vm['OS-EXT-STS:power_state']) + '\n'
         #vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + string2int(vm['status']) + '\n'
@@ -292,7 +292,7 @@ if __name__ == "__main__":
     print "Openstack Data Collector"
     init()
     for tenant in tenants:
-        token = getToken(tenant)
+        token = getTokenv3(tenant)
         limits = getLimits(token)
         postLimits(limits, tenant["name"], tenant["pushgw_url"])
         vms = getVms(token)
