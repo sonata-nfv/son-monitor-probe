@@ -36,7 +36,10 @@ class server(object):
         self.hostId = server_["hostId"]
         self.hostName = server_["OS-EXT-SRV-ATTR:hypervisor_hostname"]
         self.addresses = server_["addresses"]
-        self.imageId = server_["image"]["id"]
+        if 'id' in server_["image"]:
+            self.imageId = server_["image"]["id"]
+        else:
+            self.imageId = 'null'
         self.launched = server_["OS-SRV-USG:launched_at"]
         self.flavorId = server_["flavor"]["id"]
         #self.security_groups = server_["security_groups"]
