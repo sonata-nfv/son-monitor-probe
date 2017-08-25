@@ -79,7 +79,10 @@ class Statistics:
             con['net_tx_MB'] = self.convert2MB(words[11],words[12])
             con['block_in_MB'] = self.convert2MB(words[13],words[14])
             con['block_ou_MB'] = self.convert2MB(words[16],words[17])
-            self.containers.append(con)
+            if (con['mem_usage_MB'] == 0) and (con['mem_limit_MB'] == 0):
+                continue
+            else:
+                self.containers.append(con)
 
     def collectData(self):
         cli = Client(base_url='unix://var/run/docker.sock')
