@@ -88,6 +88,42 @@ def getToken(tenant):
         logger.warning('Error: '+e)
 
 
+def getTokenv3(tenant):
+    global token
+    global service_endpoint
+    
+    try: 
+        req = urllib2.Request(keystone_url)
+        req.add_header('Content-Type','application/json')
+        postdata={"auth":{"identity":{"methods":["password"],"password":{"user":{"name":tenant['name'],"domain":{"name":"default"},"password":tenant['password']}}}}}
+        data = json.dumps(postdata)
+        response=urllib2.urlopen(req,data)
+        code = response.code
+        data = json.loads(response.read())
+        if code == 201:
+            token = response.info().getheader('X-Subject-Token')
+        else:
+            return None
+        
+        
+        service_endpoints = data["token"]["catalog"]
+        serv_endpoints ={}
+        serv_endpoints['nova'] = getServiceEndpointv3("nova",service_endpoints)
+        serv_endpoints['neutron'] = getServiceEndpointv3("neutron",service_endpoints)
+        serv_endpoints['glance'] = getServiceEndpointv3("glance",service_endpoints)
+        serv_endpoints['cinder'] = getServiceEndpointv3("cinder",service_endpoints)
+        logger.info('Token: '+token)
+        print 'Token: '+ token
+        return {"id": token, "service_endpoints": serv_endpoints}
+        
+    except urllib2.HTTPError, e:
+        print e.code
+        logger.warning('Error: '+e)
+    except urllib2.URLError, e:
+        print e.args
+        logger.warning('Error: '+e)
+
+
 def getServiceEndpoint(srv_name, endpoints):
     for endpoint in endpoints:
         if endpoint["name"] == srv_name: 
@@ -96,7 +132,18 @@ def getServiceEndpoint(srv_name, endpoints):
             host = host[0 : 0 + host.find(":")]
             url = url.replace(host,controller_ip)
             return url
-            
+
+def getServiceEndpointv3(srv_name, endpoints):
+    for endpoint in endpoints:
+        if endpoint["name"] == srv_name: 
+            list = endpoint["endpoints"]
+            for ep in list:
+                if ep['interface'] == "public":
+                    url = ep["url"]
+                    host = url[url.find("//")+2 : url.find("//") + len(url)-url.find("//")]
+                    host = host[0 : 0 + host.find(":")]
+                    url = url.replace(host,controller_ip)
+                    return url
             
 def getLimits(token):
     try: 
@@ -209,9 +256,9 @@ def postVMmetrics(vms, tenant_name, urls):
     vm_status = "# TYPE vm_status gauge" + '\n'
     
     for vm in vms:
-        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(date2int(vm['updated'])) + timestamp + '\n'
-        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + str(vm['OS-EXT-STS:power_state']) + timestamp + '\n'
-        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+vm['net_labels']+"} " + string2int(vm['status']) + timestamp + '\n'
+        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + str(date2int(vm['updated'])) + timestamp + '\n'
+        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + str(vm['OS-EXT-STS:power_state']) + timestamp + '\n'
+        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + string2int(vm['status']) + timestamp + '\n'
         #vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"}" + str(date2int(vm['updated'])) + '\n'
         #vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + str(vm['OS-EXT-STS:power_state']) + '\n'
         #vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + string2int(vm['status']) + '\n'
@@ -245,7 +292,7 @@ if __name__ == "__main__":
     print "Openstack Data Collector"
     init()
     for tenant in tenants:
-        token = getToken(tenant)
+        token = getTokenv3(tenant)
         limits = getLimits(token)
         postLimits(limits, tenant["name"], tenant["pushgw_url"])
         vms = getVms(token)
