@@ -34,6 +34,7 @@ __date__ ="$Apr 8, 2016 1:30:54 PM$"
 class cntdt:
 
     data = []
+    dt2sent = False
     
     def __init__(self):
         self.data = Statistics().getMonInfo()
@@ -59,6 +60,9 @@ class cntdt:
         cnt_status = "# TYPE cnt_status gauge" + '\n'
 
         for cnt in self.data:
+            if len(cnt['stats']) == 0:
+                continue
+            self.dt2sent = True
             cnt_created += "cnt_created{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(cnt['created']) + timestamp + '\n'
             cnt_status += "cnt_status{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['status'])) + timestamp + '\n'
             cnt_cpu_perc += "cnt_cpu_perc{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}"+str(self.checkNone(cnt['stats']['cpu_perc'])) + timestamp + '\n'
@@ -71,4 +75,7 @@ class cntdt:
             cnt_block_ou_MB += "cnt_block_ou_MB{id=\""+cnt['id']+"\",image_name=\""+cnt['image_name']+"\",image=\""+cnt['image']+"\",name=\""+cnt['name'][0]+"\"}" +str(self.checkNone(cnt['stats']['block_ou_MB'])) + timestamp + '\n'
 
         data = cnt_created + cnt_cpu_perc +cnt_mem_perc + cnt_mem_usage_MB + cnt_mem_limit_MB + cnt_net_rx_MB + cnt_net_tx_MB + cnt_block_in_MB + cnt_block_ou_MB + cnt_status
-        return data
+        if self.dt2sent:
+            return data
+        else:
+            None
