@@ -66,7 +66,7 @@ def getToken(tenant):
         req.add_header('Content-Type','application/json')
         postdata={"auth": {"tenantName": tenant['name'], "passwordCredentials": {"username": tenant['user_name'], "password": tenant['password']}}}
         data = json.dumps(postdata)
-        response=urllib2.urlopen(req,data)
+        response=urllib2.urlopen(req,data,timeout = 5)
         code = response.code
         data = json.loads(response.read())
         token=data["access"]["token"]
@@ -97,7 +97,7 @@ def getTokenv3(tenant):
         req.add_header('Content-Type','application/json')
         postdata={"auth":{"identity":{"methods":["password"],"password":{"user":{"name":tenant['name'],"domain":{"name":"default"},"password":tenant['password']}}}}}
         data = json.dumps(postdata)
-        response=urllib2.urlopen(req,data)
+        response=urllib2.urlopen(req,data, timeout = 5)
         code = response.code
         data = json.loads(response.read())
         if code == 201:
@@ -151,7 +151,7 @@ def getLimits(token):
         req = urllib2.Request(url)
         req.add_header('Content-Type','application/json')
         req.add_header('X-Auth-Token',token["id"])
-        response=urllib2.urlopen(req)
+        response=urllib2.urlopen(req, timeout = 5)
         code = response.code
         data = json.loads(response.read())
         return data
@@ -168,7 +168,7 @@ def pushdata(server,data,label,tenant_name):
         req = urllib2.Request(server+"/job/"+label+"/instance/"+node_name+"/vim_tenant/"+tenant_name)
         req.add_header('Content-Type','text/html')
         req.get_method = lambda: 'PUT'
-        response=urllib2.urlopen(req,data)
+        response=urllib2.urlopen(req,data, timeout = 10)
         code = response.code
         logger.info('Response Code: '+str(code))
 
