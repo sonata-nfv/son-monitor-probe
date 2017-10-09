@@ -30,7 +30,7 @@ __author__="panos"
 __date__ ="$Apr 20, 2016 1:11:43 PM$"
 
 import urllib2, time, logging                                                                                                       
-import json, urllib2, os, subprocess
+import json, os, subprocess
 from threading import  Thread
 from VmData import vmdt
 from DtFiltering import valdt 
@@ -41,14 +41,16 @@ from logging.handlers import RotatingFileHandler
 def init():
     global prometh_server
     global node_name
+    global interval
     global logger
     global vm_id
        
     #read configuration
-    
+    interval=3
     conf = configuration("/opt/Monitoring/node.conf")
     node_name = os.getenv('NODE_NAME', conf.ConfigSectionMap("vm_node")['node_name'])
     prometh_server = os.getenv('PROM_SRV', conf.ConfigSectionMap("Prometheus")['server_url'])
+    interval = conf.ConfigSectionMap("vm_node")['post_freq']
     logger = logging.getLogger('dataCollector')
     #hdlr = logging.FileHandler('dataCollector.log', mode='w')
     hdlr = RotatingFileHandler('dataCollector.log', maxBytes=10000, backupCount=1)
@@ -66,6 +68,7 @@ def init():
     logger.info('SP Data Collector')
     logger.info('Promth P/W Server '+prometh_server)
     logger.info('Monitoring Node '+node_name)
+    logger.info('Monitoring time interval '+interval)
 
 def postNode(node_,type_, data_):
     #print data
@@ -146,6 +149,6 @@ if __name__ == "__main__":
     
     
     while 1:
-        time.sleep(3)
+        time.sleep(float(interval))
         #print vm_dt
         postNode(node_name,"vnf",vm_dt)
