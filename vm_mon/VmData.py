@@ -48,7 +48,7 @@ class vmdt:
 
     def prom_parser(self):
         timestamp = " "+str(int(datetime.datetime.now().strftime("%s")) * 1000)
-        #containers metric types
+        #vm metric types
         vm_up = "# TYPE vm_up gauge" + '\n'
         vm_cpu_perc = "# TYPE vm_cpu_perc gauge" + '\n'
         vm_mem_perc = "# TYPE vm_mem_perc gauge" + '\n'

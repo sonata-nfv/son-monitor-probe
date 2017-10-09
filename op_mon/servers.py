@@ -72,7 +72,7 @@ class server(object):
                     label += ":"+interface['addr']
                 label += "\""
                 netlabels.append(network)
-
+        label = ", "+label
         return label
 
 

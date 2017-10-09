@@ -66,7 +66,7 @@ def getToken(tenant):
         req.add_header('Content-Type','application/json')
         postdata={"auth": {"tenantName": tenant['name'], "passwordCredentials": {"username": tenant['user_name'], "password": tenant['password']}}}
         data = json.dumps(postdata)
-        response=urllib2.urlopen(req,data)
+        response=urllib2.urlopen(req,data,timeout = 5)
         code = response.code
         data = json.loads(response.read())
         token=data["access"]["token"]
@@ -97,7 +97,7 @@ def getTokenv3(tenant):
         req.add_header('Content-Type','application/json')
         postdata={"auth":{"identity":{"methods":["password"],"password":{"user":{"name":tenant['name'],"domain":{"name":"default"},"password":tenant['password']}}}}}
         data = json.dumps(postdata)
-        response=urllib2.urlopen(req,data)
+        response=urllib2.urlopen(req,data, timeout = 5)
         code = response.code
         data = json.loads(response.read())
         if code == 201:
@@ -151,7 +151,7 @@ def getLimits(token):
         req = urllib2.Request(url)
         req.add_header('Content-Type','application/json')
         req.add_header('X-Auth-Token',token["id"])
-        response=urllib2.urlopen(req)
+        response=urllib2.urlopen(req, timeout = 5)
         code = response.code
         data = json.loads(response.read())
         return data
@@ -168,7 +168,7 @@ def pushdata(server,data,label,tenant_name):
         req = urllib2.Request(server+"/job/"+label+"/instance/"+node_name+"/vim_tenant/"+tenant_name)
         req.add_header('Content-Type','text/html')
         req.get_method = lambda: 'PUT'
-        response=urllib2.urlopen(req,data)
+        response=urllib2.urlopen(req,data, timeout = 10)
         code = response.code
         logger.info('Response Code: '+str(code))
 
@@ -189,6 +189,7 @@ def getVms(creds):
         code = response.code
         data = json.loads(response.read())
         for ops_svr in data["servers"]:
+            ops_svr[ 'addrLabels'] = srv.getAddr()
             srv = server(ops_svr) 
             if ops_svr["status"] == "ACTIVE":
                 srv.addDgn(getVmStats(ops_svr["id"],creds))
@@ -256,9 +257,9 @@ def postVMmetrics(vms, tenant_name, urls):
     vm_status = "# TYPE vm_status gauge" + '\n'
     
     for vm in vms:
-        vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + str(date2int(vm['updated'])) + timestamp + '\n'
-        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + str(vm['OS-EXT-STS:power_state']) + timestamp + '\n'
-        vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + string2int(vm['status']) + timestamp + '\n'
+        vm_update +="vm_last_update{uuid=\""+vm['id']+"\""+vm['addrLabels'] +", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + str(date2int(vm['updated'])) + timestamp + '\n'
+        vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\""+vm['addrLabels'] +", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + str(vm['OS-EXT-STS:power_state']) + timestamp + '\n'
+        vm_status +="vm_status{uuid=\""+vm['id']+"\""+vm['addrLabels'] +", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\""+"} " + string2int(vm['status']) + timestamp + '\n'
         #vm_update +="vm_last_update{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"}" + str(date2int(vm['updated'])) + '\n'
         #vm_pow_state +="vm_power_state{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + str(vm['OS-EXT-STS:power_state']) + '\n'
         #vm_status +="vm_status{uuid=\""+vm['id']+"\", created=\""+vm['created']+"\", tenant_id=\""+vm['tenant_id']+"\", user_id=\""+vm['user_id']+"\", name=\""+vm['name']+"\", image_id=\""+vm['image']['id']+"\"} " + string2int(vm['status']) + '\n'
