@@ -80,7 +80,7 @@ def postNode(node_,type_, data_):
         req = urllib2.Request(url)
         req.add_header('Content-Type','text/html')
         req.get_method = lambda: 'PUT'
-        response=urllib2.urlopen(req,data_, timeout = 3)
+        response=urllib2.urlopen(req,data_, timeout = 10)
         code = response.code
         logger.info('Response Code: '+str(code))      
     except urllib2.HTTPError, e:
