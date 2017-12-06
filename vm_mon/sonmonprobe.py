@@ -29,7 +29,7 @@ partner consortium (www.sonata-nfv.eu).
 __author__="panos"
 __date__ ="$Apr 20, 2016 1:11:43 PM$"
 
-import time, logging
+import urllib2, time, logging
 import json, os, subprocess
 from threading import  Thread
 from VmData import vmdt
@@ -161,6 +161,5 @@ if __name__ == "__main__":
         time.sleep(float(interval))
         #print vm_dt
         for url in prometh_server:
-            print(url)
             postNode(node_name,"vnf",vm_dt,url)
 
