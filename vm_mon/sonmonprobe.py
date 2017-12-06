@@ -29,7 +29,7 @@ partner consortium (www.sonata-nfv.eu).
 __author__="panos"
 __date__ ="$Apr 20, 2016 1:11:43 PM$"
 
-import urllib2, time, logging                                                                                                       
+import urllib2, time, logging
 import json, os, subprocess
 from threading import  Thread
 from VmData import vmdt
@@ -51,6 +51,10 @@ def init():
     node_name = os.getenv('NODE_NAME', conf.ConfigSectionMap("vm_node")['node_name'])
     prometh_server = os.getenv('PROM_SRV', conf.ConfigSectionMap("Prometheus")['server_url'])
     interval = conf.ConfigSectionMap("vm_node")['post_freq']
+    if is_json(prometh_server):
+        prometh_server = json.loads(prometh_server)
+    else:
+        prometh_server = [prometh_server]
     logger = logging.getLogger('dataCollector')
     #hdlr = logging.FileHandler('dataCollector.log', mode='w')
     hdlr = RotatingFileHandler('dataCollector.log', maxBytes=10000, backupCount=1)
@@ -66,21 +70,19 @@ def init():
     node_name +=":"+vm_id
     print vm_id
     logger.info('SP Data Collector')
-    logger.info('Promth P/W Server '+prometh_server)
+    logger.info('Promth P/W Server '+json.dumps(prometh_server))
     logger.info('Monitoring Node '+node_name)
     logger.info('Monitoring time interval '+interval)
 
-def postNode(node_,type_, data_):
-    #print data
-    url = prometh_server+"/job/"+type_+"/instance/"+node_
-    #print url
+def postNode(node_,type_, data_,server_):
+    url = server_+"/job/"+type_+"/instance/"+node_
     logger.info('Post on: \n'+url)
     #logger.info('Post ports metrics: \n'+data_)
     try: 
         req = urllib2.Request(url)
         req.add_header('Content-Type','text/html')
         req.get_method = lambda: 'PUT'
-        response=urllib2.urlopen(req,data_)
+        response=urllib2.urlopen(req,data_, timeout = 10)
         code = response.code
         logger.info('Response Code: '+str(code))      
     except urllib2.HTTPError, e:
@@ -140,6 +142,13 @@ def collectVM(id_):
         vm_dt = dt_collector.prom_parser()
         time.sleep(1)
 
+def is_json(myjson):
+  try:
+    json_object = json.loads(myjson)
+  except ValueError, e:
+    return False
+  return True
+
 
 if __name__ == "__main__":
     init()
@@ -151,4 +160,6 @@ if __name__ == "__main__":
     while 1:
         time.sleep(float(interval))
         #print vm_dt
-        postNode(node_name,"vnf",vm_dt)
+        for url in prometh_server:
+            postNode(node_name,"vnf",vm_dt,url)
+
