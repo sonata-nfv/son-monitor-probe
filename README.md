@@ -4,7 +4,6 @@ Sonata's monitoring system provides three probes for collecting data from:
  * Service Platform infrastucture (sp_mon)
  * VNFs (vm_mon)
  * VIMs (op_mon)
- * ODL server (odl_mon)
 
 More detailed information about installation, dependencies etc are available in README files of each probe. 
 
