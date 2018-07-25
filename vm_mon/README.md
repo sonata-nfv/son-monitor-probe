@@ -32,11 +32,9 @@ sudo docker run -d --name son-vm-probe -e NODE_NAME=VNF_1 -e PROM_SRV=http://<pu
 
 
 ## License
-
 This son-vm-probe is published under Apache 2.0 license. Please see the LICENSE file for more details.
 
-###Lead Developers
-
+### Lead Developers
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
 
  * Panos Trakadas  (trakadasp)
