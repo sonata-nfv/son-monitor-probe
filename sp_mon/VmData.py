@@ -1,37 +1,40 @@
-'''
-Copyright (c) 2015 SONATA-NFV [, ANY ADDITIONAL AFFILIATION]
-ALL RIGHTS RESERVED.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Neither the name of the SONATA-NFV [, ANY ADDITIONAL AFFILIATION]
-nor the names of its contributors may be used to endorse or promote 
-products derived from this software without specific prior written 
-permission.
-
-This work has been performed in the framework of the SONATA project,
-funded by the European Commission under Grant number 671517 through 
-the Horizon 2020 and 5G-PPP programmes. The authors would like to 
-acknowledge the contributions of their colleagues of the SONATA 
-partner consortium (www.sonata-nfv.eu).
-'''
+## ALL RIGHTS RESERVED.
+##
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+##
+##     http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+##
+## Neither the name of the SONATA-NFV, 5GTANGO [, ANY ADDITIONAL AFFILIATION]
+## nor the names of its contributors may be used to endorse or promote
+## products derived from this software without specific prior written
+## permission.
+##
+## This work has been performed in the framework of the SONATA project,
+## funded by the European Commission under Grant number 671517 through
+## the Horizon 2020 and 5G-PPP programmes. The authors would like to
+## acknowledge the contributions of their colleagues of the SONATA
+## partner consortium (www.sonata-nfv.eu).
+##
+## This work has been performed in the framework of the 5GTANGO project,
+## funded by the European Commission under Grant number 761493 through
+## the Horizon 2020 and 5G-PPP programmes. The authors would like to
+## acknowledge the contributions of their colleagues of the 5GTANGO
+## partner consortium (www.5gtango.eu).
+# encoding: utf-8
 
 import os, subprocess
 from time import sleep
 import sys,time,datetime
 
-__author__="panos"
-__date__ ="$Apr 8, 2016 1:30:54 PM$"
+
 
 class vmdt:
     
@@ -66,39 +69,39 @@ class vmdt:
         vm_disk_total_1k_blocks = "# TYPE vm_disk_total_1k_blocks gauge" + '\n'
     
         data_ = self.mon_data
-        vm_up += "vm_up{id=\""+self.id+"\"}" + str(int(datetime.datetime.now().strftime("%s"))) + timestamp+ '\n'
+        vm_up += "vm_up{resource_id=\""+self.id+"\"}" + str(int(datetime.datetime.now().strftime("%s"))) + timestamp+ '\n'
         for cp in data_['cpu']:
-            vm_cpu_perc += "vm_cpu_perc{id=\""+self.id+"\", core=\""+str(cp['core'])+"\"}" +str(cp['usage']) + timestamp + '\n'
+            vm_cpu_perc += "vm_cpu_perc{resource_id=\""+self.id+"\", core=\""+str(cp['core'])+"\"}" +str(cp['usage']) + timestamp + '\n'
         
-        vm_mem_perc += "vm_mem_perc{id=\""+self.id+"\"}" +str(round(float((data_['ram']['freeRam'])/float(data_['ram']['totalRAM'])*100),2)) + timestamp + '\n'
-        vm_mem_free_MB += "vm_mem_free_MB{id=\""+self.id+"\"}" +str(data_['ram']['freeRam']) + timestamp + '\n'
-        vm_mem_total_MB += "vm_mem_total_MB{id=\""+self.id+"\"}" +str(data_['ram']['totalRAM']) + timestamp + '\n'
+        vm_mem_perc += "vm_mem_perc{resource_id=\""+self.id+"\"}" +str(round(float((data_['ram']['freeRam'])/float(data_['ram']['totalRAM'])*100),2)) + timestamp + '\n'
+        vm_mem_free_MB += "vm_mem_free_MB{resource_id=\""+self.id+"\"}" +str(data_['ram']['freeRam']) + timestamp + '\n'
+        vm_mem_total_MB += "vm_mem_total_MB{resource_id=\""+self.id+"\"}" +str(data_['ram']['totalRAM']) + timestamp + '\n'
         
         for cp in data_['network']:   
-            vm_net_rx_MB += "vm_net_rx_MB {id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_MB']) + timestamp + '\n'
-            vm_net_tx_MB += "vm_net_tx_MB{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_MB']) + timestamp + '\n'
+            vm_net_rx_MB += "vm_net_rx_MB {resource_id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_MB']) + timestamp + '\n'
+            vm_net_tx_MB += "vm_net_tx_MB{resource_id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_MB']) + timestamp + '\n'
             if cp['rx_bps'] != -1:
-                vm_net_rx_bps += "vm_net_rx_bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_bps']) + timestamp + '\n'
+                vm_net_rx_bps += "vm_net_rx_bps{resource_id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_bps']) + timestamp + '\n'
             else:
                 vm_net_rx_bps =''
             if cp['tx_bps'] != -1:
-                vm_net_tx_bps += "vm_net_tx_bps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_bps']) + timestamp + '\n'
+                vm_net_tx_bps += "vm_net_tx_bps{resource_id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_bps']) + timestamp + '\n'
             else:
                 vm_net_tx_bps=''
             if cp['rx_pps'] != -1:
-                vm_net_rx_pps += "vm_net_rx_pps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_pps']) + timestamp + '\n'
+                vm_net_rx_pps += "vm_net_rx_pps{resource_id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['rx_pps']) + timestamp + '\n'
             else:
                 vm_net_rx_pps=''
             if cp['tx_pps'] != -1:
-                vm_net_tx_pps += "vm_net_tx_pps{id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_pps']) + timestamp + '\n'
+                vm_net_tx_pps += "vm_net_tx_pps{resource_id=\""+self.id+"\", inf=\""+str(cp['interface'])+"\"}" +str(cp['tx_pps']) + timestamp + '\n'
             else:
                 vm_net_tx_pps=''
 
 
         for cp in data_['disk']: 
-            vm_disk_usage_perc += "vm_disk_usage_perc{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['usage_perc']) + timestamp + '\n'
-            vm_disk_used_1k_blocks += "vm_disk_used_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['used']) + timestamp + '\n'
-            vm_disk_total_1k_blocks += "vm_disk_total_1k_blocks{id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['size_1k_block'])+ '\n'
+            vm_disk_usage_perc += "vm_disk_usage_perc{resource_id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['usage_perc']) + timestamp + '\n'
+            vm_disk_used_1k_blocks += "vm_disk_used_1k_blocks{resource_id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['used']) + timestamp + '\n'
+            vm_disk_total_1k_blocks += "vm_disk_total_1k_blocks{resource_id=\""+self.id+"\", file_system=\""+str(cp['file_system'])+"\"}" +str(cp['size_1k_block'])+ '\n'
             
         data = vm_up + vm_cpu_perc +vm_mem_perc + vm_mem_free_MB + vm_mem_total_MB +vm_net_rx_MB + vm_net_tx_MB + vm_disk_usage_perc + vm_disk_used_1k_blocks  + vm_disk_total_1k_blocks + vm_net_rx_bps + vm_net_tx_bps + vm_net_rx_pps + vm_net_tx_pps   
         return data

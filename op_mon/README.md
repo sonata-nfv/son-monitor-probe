@@ -1,6 +1,6 @@
-# son-vim-openstack-probe 
+# VIM probe 
 
-Sonata's vim monitoring client is used in order to gather monitoring data from VIM infrastructure (openstack) and push them to monitoring server 
+[5GTango](http://5gtango.eu)/[Sonata](http://sonata-nfv.eu) vim monitoring client is used in order to gather monitoring data from VIM infrastructure (openstack) and push them to monitoring server 
 
 Supported monitoring metrics are:
  * Total/used Cores
@@ -9,7 +9,7 @@ Supported monitoring metrics are:
  * Total/used Floating IPs
 
 ## Development
-To contribute to the development of the SONATA monitoring probes you have to fork the repository, commit new code and create pull requests.
+To contribute to the development of the monitoring probes you have to fork the repository, commit new code and create pull requests.
 
 ### Dependencies
  * python 2.7
@@ -38,7 +38,7 @@ sudo pyhton opensdatacollector.py
 
 This son-vim-probe is published under Apache 2.0 license. Please see the LICENSE file for more details.
 
----
+
 #### Lead Developers
 
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
@@ -48,5 +48,4 @@ The following lead developers are responsible for this repository and have admin
 
 #### Feedback-Chanel
 
-* You may use the mailing list sonata-dev@lists.atosresearch.eu
 * Please use the GitHub issues to report bugs.
