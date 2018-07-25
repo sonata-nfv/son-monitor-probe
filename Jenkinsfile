@@ -10,12 +10,12 @@ pipeline {
         }
         stage('son-monitor-spprobe') {
           steps {
-            sh 'docker build -t registry.sonata-nfv.eu:5000/son-monitor-spprobe -f sp_mon/Dockerfile'
+            sh 'docker build -f sp_mon/Dockerfile -t registry.sonata-nfv.eu:5000/son-monitor-spprobe .'
           }
         }
         stage('son-monitor-vmprobe') {
           steps {
-            sh 'docker build -t registry.sonata-nfv.eu:5000/son-monitor-vmprobe -f sp_mon/Dockerfile'
+            sh 'docker build -f vm_mon/Dockerfile -t registry.sonata-nfv.eu:5000/son-monitor-vmprobe .'
           }
         }
       }
