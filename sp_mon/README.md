@@ -1,5 +1,5 @@
-# son-service-platform-probe
-Sonata's Service platform monitoring client is used in order to gather monitoring data from VM and containers which hosts sonatas servives and push them to monitoring server. 
+# Service platform probe
+[5GTango](http://5gtango.eu)/[Sonata](http://sonata-nfv.eu) service platform monitoring client is used in order to gather monitoring data from VM and containers which hosts sonatas servives and push them to monitoring server. 
 
 Supported monitoring metrics are:
  * cpu usage
@@ -8,7 +8,7 @@ Supported monitoring metrics are:
  * network traffic
 
 ## Development
-To contribute to the development of the SONATA monitoring probes you have to fork the repository, commit new code and create pull requests.
+To contribute to the development of the monitoring probes you have to fork the repository, commit new code and create pull requests.
 
 ### Dependencies
  * python 2.7
