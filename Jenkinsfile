@@ -37,12 +37,12 @@ pipeline {
             echo 'Publication of containers in local registry....'
           }
         }
-        stage('son-monitor-spprobe) {
+        stage('son-monitor-spprobe') {
           steps {
             sh 'docker push registry.sonata-nfv.eu:5000/son-monitor-spprobe'
           }
         }
-        stage('son-monitor-vmprobe) {
+        stage('son-monitor-vmprobe') {
           steps {
             sh 'docker push registry.sonata-nfv.eu:5000/son-monitor-vmprobe'
           }
