@@ -13,7 +13,7 @@ More detailed information about installation, dependencies etc are available in 
 To contribute to the development of the monitoring probes you have to fork the repository, commit new code and create pull requests.
 
 ## License
-SONATA monitoring probes are published under Apache 2.0 license. Please see the LICENSE file for more details.
+Monitoring probes are published under Apache 2.0 license. Please see the LICENSE file for more details.
 
 #### Lead Developers
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
