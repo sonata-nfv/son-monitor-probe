@@ -1,4 +1,4 @@
-[![Build Status](http://jenkins.sonata-nfv.eu/buildStatus/icon?job=son-monitor-probe)](http://jenkins.sonata-nfv.eu/job/son-monitor-probe) 
+[![Build Status](https://jenkins.sonata-nfv.eu/buildStatus/icon?job=son-mon-probe-pipeline/master)](http://jenkins.sonata-nfv.eu/job/son-mon-probe-pipeline/master) 
 <p align="center"><img src="https://github.com/sonata-nfv/son-monitor/wiki/images/sonata-5gtango-logo-500px.png" /></p>
 
 # Monitoring probes  

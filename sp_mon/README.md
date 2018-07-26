@@ -1,7 +1,7 @@
 # Service platform probe
-[5GTango](http://5gtango.eu)/[Sonata](http://sonata-nfv.eu) service platform monitoring client is used in order to gather monitoring data from VM and containers which hosts sonatas servives and push them to monitoring server. 
+[5GTango](http://5gtango.eu)/[Sonata](http://sonata-nfv.eu) service platform monitoring client is used in order to gather monitoring data from VM and containers which hosts 5GTango/Sonata services and push them to the monitoring server. 
 
-Supported monitoring metrics are:
+Among the monitoring metrics supported by the probe are:
  * cpu usage
  * memory usage
  * disk usage 
@@ -33,8 +33,8 @@ This son-sp-probe is published under Apache 2.0 license. Please see the LICENSE 
 #### Lead Developers
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
 
- * Panos Trakadas  (trakadasp)
  * Panos Karkazis  (pkarkazis)
+ * Panos Trakadas  (trakadasp)
 
 #### Feedback-Chanel
 
