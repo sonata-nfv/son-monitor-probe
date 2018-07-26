@@ -2,7 +2,7 @@
 [5GTango](http://5gtango.eu)/[Sonata](http://sonata-nfv.eu) VM monitoring client is used in order to gather monitoring data from VM's linux kernel (/proc/stat/, /proc/dev/net etc) and push them to monitoring server. 
 The url of the pushgateway monitoring server must be set in node.conf file 
 
-Supported monitoring metrics are:
+Among the monitoring metrics supported by the probe are:
  * cpu usage
  * memory usage
  * disk usage 

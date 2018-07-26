@@ -1,8 +1,8 @@
 # VIM probe 
 
-[5GTango](http://5gtango.eu)/[Sonata](http://sonata-nfv.eu) vim monitoring client is used in order to gather monitoring data from VIM infrastructure (openstack) and push them to monitoring server 
+[5GTango](http://5gtango.eu)/[Sonata](http://sonata-nfv.eu) VIM monitoring client is used in order to gather monitoring data from VIM infrastructure (openstack) and push them to monitoring server. 
 
-Supported monitoring metrics are:
+Among the monitoring metrics supported by the probe are:
  * Total/used Cores
  * Total/used Instances
  * Total/used RAM size
