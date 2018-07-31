@@ -10,12 +10,12 @@ pipeline {
         }
         stage('son-monitor-spprobe') {
           steps {
-            sh 'docker build -f sp_mon/Dockerfile -t registry.sonata-nfv.eu:5000/son-monitor-spprobe:v4.0 .'
+            sh 'docker build -f sp_mon/Dockerfile -t registry.sonata-nfv.eu:5000/son-monitor-spprobe .'
           }
         }
         stage('son-monitor-vmprobe') {
           steps {
-            sh 'docker build -f vm_mon/Dockerfile -t registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v4.0 .'
+            sh 'docker build -f vm_mon/Dockerfile -t registry.sonata-nfv.eu:5000/son-monitor-vmprobe .'
           }
         }
       }
@@ -39,21 +39,21 @@ pipeline {
         }
         stage('son-monitor-spprobe') {
           steps {
-            sh 'docker push registry.sonata-nfv.eu:5000/son-monitor-spprobe:v4.0'
+            sh 'docker push registry.sonata-nfv.eu:5000/son-monitor-spprobe'
           }
         }
         stage('son-monitor-vmprobe') {
           steps {
-            sh 'docker push registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v4.0'
+            sh 'docker push registry.sonata-nfv.eu:5000/son-monitor-vmprobe'
           }
         }
       }
     }
-    stage('Deployment in sta-sp-v4.0') {
+    stage('Deployment in pre-int') {
       parallel {
-        stage('Deployment in sta-sp-v4.0') {
+        stage('Deployment in pre-int') {
           steps {
-            echo 'Deploying in sta-sp-v4.0...'
+            echo 'Deploying in pre-int...'
           }
         }
         stage('Deploying') {
@@ -61,7 +61,7 @@ pipeline {
             sh 'rm -rf tng-devops || true'
             sh 'git clone https://github.com/sonata-nfv/tng-devops.git'
             dir(path: 'tng-devops') {
-              sh 'ansible-playbook roles/sp.yml -i environments -e "target=sta-sp-v4.0 component=monitoring"'
+              sh 'ansible-playbook roles/sp.yml -i environments -e "target=pre-int-sp component=monitoring"'
             }
           }
         }
@@ -76,14 +76,14 @@ pipeline {
         }
         stage('son-monitor-spprobe') {
           steps {
-            sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-spprobe:v4.0 registry.sonata-nfv.eu:5000/son-monitor-spprobe:v4.0'
-            sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-spprobe:v4.0'
+            sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-spprobe:latest registry.sonata-nfv.eu:5000/son-monitor-spprobe:int'
+            sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-spprobe:int'
           }
         }
         stage('son-monitor-vmprobe') {
           steps {
-            sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v4.0 registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v4.0'
-            sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v4.0'
+            sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-vmprobe:latest registry.sonata-nfv.eu:5000/son-monitor-vmprobe:int'
+            sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-vmprobe:int'
           }
         }
       }
