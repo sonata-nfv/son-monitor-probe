@@ -68,9 +68,6 @@ pipeline {
       }
     }
     stage('Promoting containers to integration env') {
-      when {
-         branch 'master'
-      }
       parallel {
         stage('Publishing containers to int') {
           steps {
