@@ -18,6 +18,11 @@ pipeline {
             sh 'docker build -f vm_mon/Dockerfile -t registry.sonata-nfv.eu:5000/son-monitor-vmprobe .'
           }
         }
+        stage('tng-monitor-stats_collector') {
+          steps {
+            sh 'docker build -f cnf_mon/Dockerfile -t registry.sonata-nfv.eu:5000/tng-stats-collector .'
+          }
+        }
       }
     }
     stage('Unit Tests') {
@@ -45,6 +50,11 @@ pipeline {
         stage('son-monitor-vmprobe') {
           steps {
             sh 'docker push registry.sonata-nfv.eu:5000/son-monitor-vmprobe'
+          }
+        }
+        stage('tng-monitor-stats_collector') {
+          steps {
+            sh 'docker push registry.sonata-nfv.eu:5000/tng-stats-collector'
           }
         }
       }
@@ -84,6 +94,12 @@ pipeline {
           steps {
             sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-vmprobe:latest registry.sonata-nfv.eu:5000/son-monitor-vmprobe:int'
             sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-vmprobe:int'
+          }
+        }
+        stage('son-monitor-vmprobe') {
+          steps {
+            sh 'docker tag registry.sonata-nfv.eu:5000/tng-stats-collector:latest registry.sonata-nfv.eu:5000/tng-stats-collector:int'
+            sh 'docker push  registry.sonata-nfv.eu:5000/tng-stats-collector:int'
           }
         }
       }
