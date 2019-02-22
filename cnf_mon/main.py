@@ -48,8 +48,8 @@ if __name__ == '__main__':
     vnf_url = os.getenv('VNF_STATS_URL', None)
     interval = os.getenv('INTERVAL', None)
     if (not prom_url) or (not vnf_url) or (not interval):
-        print('PW_URL :'+prom_url)
-        print('VNF_STATS_URL :' + vnf_url)
-        print('INTERVAL :' + interval)
+        print('PW_URL :'+str(prom_url))
+        print('VNF_STATS_URL :' + str(vnf_url))
+        print('INTERVAL :' + str(interval))
     else:
         vnf_monitor(prom_pw_url_=prom_url,vnf_stats_url_=vnf_url,interval_=int(interval), logger_=logger)
