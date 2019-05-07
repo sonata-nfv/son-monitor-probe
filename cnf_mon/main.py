@@ -44,9 +44,9 @@ if __name__ == '__main__':
     logger.addHandler(hdlr)
     logger.setLevel(logging.WARNING)
     logger.setLevel(logging.INFO)
-    prom_url = os.getenv('PW_URL', None)
+    prom_url = os.getenv('PW_URL', 'pushgateway.sonata.svc:9091')
     vnf_url = os.getenv('VNF_STATS_URL', None)
-    interval = os.getenv('INTERVAL', None)
+    interval = os.getenv('INTERVAL', 2)
     if (not prom_url) or (not vnf_url) or (not interval):
         print('PW_URL :'+str(prom_url))
         print('VNF_STATS_URL :' + str(vnf_url))
