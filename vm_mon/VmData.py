@@ -72,7 +72,7 @@ class vmdt:
         for cp in data_['cpu']:
             vm_cpu_perc += "vm_cpu_perc{resource_id=\""+self.id+"\", core=\""+str(cp['core'])+"\"}" +str(cp['usage']) + timestamp + '\n'
         
-        vm_mem_perc += "vm_mem_perc{id=\""+self.id+"\"}" +str(round(100.0 - (float((data_['ram']['freeRam'])/float(data_['ram']['totalRAM'])*100)),2))+ timestamp + '\n'
+        vm_mem_perc += "vm_mem_perc{resource_id=\""+self.id+"\"}" +str(round(100.0 - (float((data_['ram']['freeRam'])/float(data_['ram']['totalRAM'])*100)),2))+ timestamp + '\n'
         vm_mem_free_MB += "vm_mem_free_MB{resource_id=\""+self.id+"\"}" +str(data_['ram']['freeRam']) + timestamp+ '\n'
         vm_mem_total_MB += "vm_mem_total_MB{resource_id=\""+self.id+"\"}" +str(data_['ram']['totalRAM']) + timestamp+ '\n'
         
