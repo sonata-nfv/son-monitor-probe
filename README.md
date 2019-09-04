@@ -6,21 +6,22 @@
  * Service Platform infrastucture (sp_mon)
  * VNFs (vm_mon)
  * VIMs (op_mon)
+ * Containers (cnf_mon) 
 
 More detailed information about installation, dependencies etc are available in README files of each probe. 
 
-## Development
-To contribute to the development of the monitoring probes you have to fork the repository, commit new code and create pull requests.
+## Licensing
 
-## License
-Monitoring probes are published under Apache 2.0 license. Please see the LICENSE file for more details.
+Monitoring framework is published under Apache 2.0 license. Please see the LICENSE file for more details.
 
 #### Lead Developers
+
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
+ 
+ * Panos Karkazis (pkarkazis)
+ * Panos Trakadas (trakadasp)
 
- * Panos Trakadas  (trakadasp)
- * Panos Karkazis  (pkarkazis)
+#### Feedback-Chanel
 
-####  Feedback-Chanel
-
-* Please use the GitHub issues to report bugs.
+* You may use the mailing list [sonata-dev-list](mailto:sonata-dev@lists.atosresearch.eu)
+* You may use the GitHub issues to report bugs

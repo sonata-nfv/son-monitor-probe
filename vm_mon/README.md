@@ -8,15 +8,8 @@ Among the monitoring metrics supported by the probe are:
  * disk usage 
  * network traffic (transmitted bytes, received bytes, packets per second, bytes per second)
 
-### Dependencies
- * python 2.7
- 
- 
-### Development
-To contribute to the development of the monitoring probes you have to fork the repository, commit new code and create pull requests.
 
-
-### Installation
+### Installing / Getting started
 a. From code
 ```
 export PROM_SRV=http://<pushgateway>:<port>/metrics
@@ -31,15 +24,35 @@ sudo docker run -d --name son-vm-probe -e NODE_NAME=VNF_1 -e PROM_SRV=http://<pu
 ```
 
 
-### License
-This son-vm-probe is published under Apache 2.0 license. Please see the LICENSE file for more details.
+## Developing
 
-### Lead Developers
+To contribute to the development of the monitoring probes you have to fork the repository, commit new code and create pull requests.
+
+### Built With
+
+ * python 2.7
+
+
+### Submiting changes
+
+To contribute to the development of the 5GTango/SONATA monitoring framwork you have to fork the repository, commit new code and create pull requests.
+
+## Versioning
+
+The most up-to-date version is v5.0.
+
+## Licensing
+
+Monitoring framework is published under Apache 2.0 license. Please see the LICENSE file for more details.
+
+#### Lead Developers
+
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
+ 
+ * Panos Karkazis (pkarkazis)
+ * Panos Trakadas (trakadasp)
 
- * Panos Trakadas  (trakadasp)
- * Panos Karkazis  (pkarkazis)
+#### Feedback-Chanel
 
-### Feedback-Chanel
-
-* Please use the GitHub issues to report bugs.
+* You may use the mailing list [sonata-dev-list](mailto:sonata-dev@lists.atosresearch.eu)
+* You may use the GitHub issues to report bugs
