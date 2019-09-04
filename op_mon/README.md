@@ -8,14 +8,8 @@ Among the monitoring metrics supported by the probe are:
  * Total/used RAM size
  * Total/used Floating IPs
 
-## Development
-To contribute to the development of the monitoring probes you have to fork the repository, commit new code and create pull requests.
+## Installing / Getting started
 
-### Dependencies
- * python 2.7
-
-
-## Installation
 From code
 
 a. Set configuration file (odc.conf)
@@ -34,18 +28,30 @@ b. Execute the probe
 sudo pyhton opensdatacollector.py
 ```
 
-## License
+## Developing
+To contribute to the development of the monitoring probes you have to fork the repository, commit new code and create pull requests.
 
-This son-vim-probe is published under Apache 2.0 license. Please see the LICENSE file for more details.
+### Built With
+ * python 2.7
 
+
+### Submiting changes
+To contribute to the development of the 5GTango/SONATA monitoring framwork you have to fork the repository, commit new code and create pull requests.
+
+## Versioning
+The most up-to-date version is v5.0.
+
+## Licensing
+Monitoring framework is published under Apache 2.0 license. Please see the LICENSE file for more details.
 
 #### Lead Developers
 
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
-
- * Panos Trakadas  (trakadasp)
- * Panos Karkazis  (pkarkazis)
+ 
+ * Panos Karkazis (pkarkazis)
+ * Panos Trakadas (trakadasp)
 
 #### Feedback-Chanel
 
-* Please use the GitHub issues to report bugs.
+* You may use the mailing list [sonata-dev-list](mailto:sonata-dev@lists.atosresearch.eu)
+* You may use the GitHub issues to report bugs
