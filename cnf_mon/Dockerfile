@@ -23,6 +23,8 @@ RUN ls -la /opt/Monitoring/*
 
 RUN chmod -R g+w /opt/Monitoring/  
 
+ENV PYTHONUNBUFFERED=TRUE
+
 WORKDIR    /opt/Monitoring
 
 CMD ["sh", "/opt/Monitoring/run.sh"]
