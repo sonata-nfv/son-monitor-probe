@@ -61,6 +61,21 @@ class vnf_monitor(object):
             return False
         return True
 
+    def sendStats(self, dt, resp, ip, port):
+        if not 'resource_id' in dt:
+            self.logger.error('Response does not contains "resource_id":' + str(resp.text))
+        else:
+            rsc_id = dt['resource_id']
+            del dt['resource_id']
+            ps = Pusher(pw_url_=self.pushgateway, node_name_=rsc_id, id_=rsc_id,
+                        logger_=self.logger)
+            for mt in dt:
+                ps.sendGauge(metric=mt.replace('-', '_'),
+                            description='', value=dt[mt],
+                            job='mon_container', labels={'ip': ip, 'port': port})
+                self.logger.info('Metric '+mt+' Pushed')
+            print(dt)
+
     def collectStats(self,interval_, stop_):
         lastclick = None
         while True:
@@ -76,20 +91,15 @@ class vnf_monitor(object):
                 port = sc.split(':')[1]
                 if resp.status_code == 200:
                     try:
-                        dt = resp.json()
-                        if not 'resource_id' in dt:
-                            self.logger.error('Response does not contains "resource_id":' + str(resp.text))
+                        dt_object = resp.json()
+                        if isinstance(dt_object, list):
+                            for dt in dt_object:
+                                if dt:
+                                    self.sendStats(dt, resp, ip, port)
+                        elif isinstance(dt_object, dict):
+                            self.sendStats(dt_object, resp, ip, port)
                         else:
-                            rsc_id = dt['resource_id']
-                            del dt['resource_id']
-                            ps = Pusher(pw_url_=self.pushgateway, node_name_=rsc_id, id_=rsc_id,
-                                        logger_=self.logger)
-                            for mt in dt:
-                                ps.sendGauge(metric=mt.replace('-', '_'),
-                                             description='', value=dt[mt],
-                                             job='mon_container', labels={'ip': ip, 'port': port})
-                                self.logger.info('Metric '+mt+' Pushed')
-                        print(dt)
+                            raise self.logger.error("Invalid data format")
                     except ValueError:
                         self.logger.error('Response is not hedjson format:' + str(resp.text))
                 else:
