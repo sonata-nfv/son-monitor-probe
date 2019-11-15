@@ -96,7 +96,7 @@ pipeline {
             sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-vmprobe:int'
           }
         }
-        stage('son-monitor-vmprobe') {
+        stage('tng-monitor-stats_collector') {
           steps {
             sh 'docker tag registry.sonata-nfv.eu:5000/tng-stats-collector:latest registry.sonata-nfv.eu:5000/tng-stats-collector:int'
             sh 'docker push  registry.sonata-nfv.eu:5000/tng-stats-collector:int'
