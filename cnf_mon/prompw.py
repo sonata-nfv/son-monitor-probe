@@ -44,12 +44,12 @@ class Pusher(object):
     def sendGauge(self,metric, description ,value, job, labels):
         for g in self.metrics:
             if g._name == metric and g._type == 'gauge':
-                g.labels(container_name=self.id,stats_ip=labels['ip'],stats_port=labels['port']).set(value)
+                g.labels(container=self.id, container_name=self.id,stats_ip=labels['ip'],stats_port=labels['port']).set(value)
                 self.push(job=job)
                 return
 
-        g = Gauge(metric, description , ["container_name","stats_ip","stats_port"], registry=self.registry)
-        g.labels(container_name=self.id,stats_ip=labels['ip'],stats_port=labels['port']).set(value)
+        g = Gauge(metric, description , ["container","container_name","stats_ip","stats_port"], registry=self.registry)
+        g.labels(container=self.id, container_name=self.id,stats_ip=labels['ip'],stats_port=labels['port']).set(value)
         self.metrics.append(g)
         self.push(job=job)
 
