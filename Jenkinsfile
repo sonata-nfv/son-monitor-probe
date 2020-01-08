@@ -122,30 +122,20 @@ pipeline {
         }
       }
     }
-    stage('Promoting release v5.0') {
+    stage('Promoting release v5.1') {
         when {
-            branch 'v5.0'
+            branch 'v5.1'
         }
         stages {
             stage('Generating release') {
                 steps {
-                    sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-spprobe:latest registry.sonata-nfv.eu:5000/son-monitor-spprobe:v5.0'
-                    sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-vmprobe:latest registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v5.0'
-                    sh 'docker tag registry.sonata-nfv.eu:5000/tng-stats-collector:latest registry.sonata-nfv.eu:5000/tng-stats-collector:v5.0'
+                    sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-spprobe:latest registry.sonata-nfv.eu:5000/son-monitor-spprobe:v5.1'
+                    sh 'docker tag registry.sonata-nfv.eu:5000/son-monitor-vmprobe:latest registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v5.1'
+                    sh 'docker tag registry.sonata-nfv.eu:5000/tng-stats-collector:latest registry.sonata-nfv.eu:5000/tng-stats-collector:v5.1'
 
-                    sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-spprobe:v5.0'
-                    sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v5.0'
-                    sh 'docker push  registry.sonata-nfv.eu:5000/tng-stats-collector:v5.0'
-                }
-            }
-            stage('Deploying in v5.0 servers') {
-                steps {
-                    sh 'rm -rf tng-devops || true'
-                    sh 'git clone https://github.com/sonata-nfv/tng-devops.git'
-                    dir(path: 'tng-devops') {
-                    sh 'ansible-playbook roles/sp.yml -i environments -e "target=sta-sp-v5-0 component=monitoring"'
-                    sh 'ansible-playbook roles/vnv.yml -i environments -e "target=sta-vnv-v5-0 component=monitoring"'
-                    }
+                    sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-spprobe:v5.1'
+                    sh 'docker push  registry.sonata-nfv.eu:5000/son-monitor-vmprobe:v5.1'
+                    sh 'docker push  registry.sonata-nfv.eu:5000/tng-stats-collector:v5.1'
                 }
             }
         }
